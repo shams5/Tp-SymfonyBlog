@@ -1,0 +1,276 @@
+-
+-
+-----
+14/06/2021
+
+Installation de Symfony
+
+Afin de pouvoir installer Symfony, nous avons besoin:
+
+	Git:
+		https://git-scm.com/download/win
+	Composer:
+		https://getcomposer.org/download/
+	Symfony:
+		https://symfony.com/download
+
+Windows:
+	Installer les différents fichiers .exe dans l'ordre Git -> Composer -> Symfony
+Mac:
+	Afin de pouvoir ajouter le PATH de Symfony, ne pas oublier d'ajouter la ligne:
+		 export PATH="$HOME/.symfony/bin:$PATH"
+	à notre terminal.
+	Pour installer Composer, entrer les quatre instructions suivantes:
+		php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+		php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+		php composer-setup.php
+		php -r "unlink('composer-setup.php');"
+		sudo mv composer.phar /usr/local/bin/composer
+
+Si l'Installer vous demande l'installation automatique du PATH, répondre oui.
+Sur Composer:
+	Ne pas activer le mode développeur
+	Prendre soin d'indiquer la version la plus avancée de PHP (7.4.9+ ou 8), ajouter cette version à notre PATH si proposé
+	Ne pas activer le proxy
+
+ATTENTION: Il ne faut pas oublier de relancer votre terminal dans le cas où vous avez installé Symfony ou Composer après l'avoir lancé. Si le terminal n'est pas réinitialisé, il ne sera pas capable de trouver le PATH de l'application requise.
+
+Afin de savoir si Symfony et le PATH sont bien installés sur notre ordinateur, il suffit de taper dans notre invite de commande la commande suivante:
+	symfony -v
+Dans le cas d'une installation réussie, la version actuelle de Symfony ainsi que la liste des commandes disponibles pour l'application devrait être présentée.
+
+Dans le cadre de notre utilisation du framework Symfony, nous allons utiliser WAMP/XAMPP/MAMP afin de gérer le serveur SQL mais nous allons utiliser un serveur local spécial pour notre site web, fourni par Symfony CLI que nous avons installé au préalable. Il nous suffit, pour lancer ce serveur local, de taper la commande suivante, dans le répertoire de notre application:
+	symfony server:start -d
+Le -d permet de lancer le serveur en arrière-plan, et ainsi de pouvoir continuer à utiliser notre terminal.
+Il ne faut pas oublier de placer notre terminal dans le répertoire de notre projet avant de taper cette commande.
+Il vous suffira alors d'entrer l'URL localhost:8000 (ou 127.0.0.1:8000) pour accéder à votre application web.
+
+---
+La structure théorique du framework Symfony
+
+Lorsque nous développons une application en utilisant notre framework, nous allons utiliser une architecture particulière, qui est nommée MVC, pour Model-View-Controller (Modèle, Vue, Controller). Les trois composants de cet acronyme sont trois Patrons de Conception (Design Patterns), qui sont associés pour fournir la logique de base de notre application.
+
+Qu'est-ce qu'un Design Pattern?
+Un Design Pattern/Patron de Conception est un arrangement caractéristique de modules, reconnu comme bonne pratique en réponse à un problème de conception de logiciel. Le Design Pattern décrit une solution standard, utilisable de la conception de différents logiciels. C'est un formalisme conçu pour répondre à des problèmes particuliers avec une méthode prédéfinie.
+
+
+La structure de Symfony est donc basée sur un paradigme Model-View-Controller, ou MVC. La structure MVC est un ensemble de Design Patterns très utilisée dans le cadre des applications possédant une interface fraphique et nécessitant une interaction de la part de l'utilisateur.
+Chaque élément de ce paradigme joue un rôle particulier:
+	Le Controller regroupe tous les programmes PHP nécessaires au bon fonctionnement de l'application. Le Controller n'est pas seulement la classe PHP COntroller applée ou la fonction correspondant à la route que nous avons requise, mais désigne le processus entier d'appel aux différentes bibliothèques et aux différents services nécessaires au bon traitement des données. C'est également le Controller qui se chargera d'appeler les Models nécessaires dans le cadre de la requête Client, et qui déterminera quels sont les fichiers de Vue nécessaires pour générer la page web à envoyer en résultat final. En bref, le Controller est le coeur de notre application.
+
+	Le Model regroupe toutes les donnéees employées par notre application. Il s'agit des données persistentes, telles que celles enregistrées dans notre base de données, mais pas seulement. Tout ce qui est information propre à être traitée par notre application et à être envoyée au client fait partie de l'aspect Model: il peut s'agir des informations stockées dans la base de données, mais également des fichiers xml annexes, des fichiers texte, ou encore des images. Le Model est donc la matière de l'application, celle que notre Controller doit, par son organisation, ordonner et distribuer de manière harmonieuse.
+	Dans notre cas, nous allons avant tout nous intéresser à la partie du Model qui est stockées dans notre base de données. Pour cela, nous allons utiliser la bibliothèque Doctrine, qui est le gestionnaire de base de données par défaut de Symfony. Dans notre application, Doctrine se chargera d'administrer nos Models sous forme d'une classe dite Entity (Entité), dont les informations seront traitées et récupérées via des classes spéciales nommées les Repository. Le Repository est une classe spécialisée, possédant plusieurs fonctions dont le but est la récupération d'informations précises contenues par les Entity, informations qui seront ensuite transmises au Controller pour leur traitement.
+
+	La View regroupe tous les fichiers nécessaires à la génération de notre page web à retourner en réponse à la requête client. Si le Model contient la matière de notre application Symfony et que le Controller s'occupe de son organisation, le but de la View est de présenter cette information de manière efficace et intelligible, via une interface graphique. La View est idéalement composée de plusieurs fichiers regroupés dans le dossier Templates, offrant les templates (c'est-à-dire les "gabarits") nécessaires pour expliciter et contextualiser les informations du Model récupéré sous décision du Controller. Le code PHP est laissé aussi minimal que possible dans ces fichiers de vue, dans l'idéal de séparation des rôles. Dans notre cas, nous allons utiliser un langage de template, Twig, qui a pour but de simplifier la maigre part de PHP de la partie vue et de la rendre aussi facile à lire et à comprendre que possible.
+
+
+15/06/2021
+
+La structure et l'arborescence de notre application Symfony
+
+Notre application est divisée en plusieurs sous-dossiers, chacun prenannt en charge un aspect du fonctionnement de l'application entière. De plus, il existe d'autres fichiers posés à la racine-même de notre application. Les autres sont, dans le cadre d'une installation classique, les dossiers bin, config, migrations, public, src (avec trois sous-dossiers qui sont controller, entity, et repository), templates, tests, translations, var, et vendor.
+
+A la source de notre dossier, nous trouvons plusieurs fichiers tels que .env, composer.json, composer.lock, ou encore symfony.lock. La plupart de ces fichiers ont pour but de gérer l'aspect mise-à-jour et gestion des bibliothèques de notre projet Symfony. Les .json et .lock indiquent à notre application les versions des bibliothèques installées et désirées.
+Le fichier .env est un fichier spécial, remplissant un rôle précise: il s'agit d'un fichier de configuration lequel petmet d'initialiser les variables d'environnement de notre application qui seront utilisées entre autres par les fichiers de configuration situées dans le dossier config. Un autre aspect important de notre fichier .env est sa capacité à changer le mode de notre application (lui permettant de passer d'un mode développement à un déploiement en production) via la variable APP_ENV, qui définit l'état de notre application. Enfin, le fichier .env permet également de configurer la connexion à notre base de données, en spécifiant notre type de Système de Gestion de Base De Données (SGBDD), ainsi que les différents réglages nécessaires à la connexion.
+
+Le dossier bin contient deux fichiers, console et phpunit. Ce dossier sert à permettre l'exécution de commandes via le terminal.
+
+Le dossier config contient les différents fichiers de configuration nécessaires à la personnalisation et aux réglages de Symfony. On peut y régler la manière dont sont administrées les routes, la sécurité, les services, les bibliothèques Doctrine et Twig, et d'autres choses encore.
+
+Le dossier migration est lié à Doctrine, et se compose de classes PHP renfermant les instructions SQL nécessaires pour effectuer chaque migration.
+
+Le dossier public est le seul dossier accessible aux requêtes client. Il contient les différents fichiers non générés pouvant être chargés sur le navigateur de l'utilisateur. On y trouve les fichiers CSS, les fichiers JavaScript, ou encore les image et autres fichiers média, en bref les fichiers devant être transmis tels quels au client. On y trouve aussi le fichier index.php qui est le point d'entrée de notre application et qui lance toute la structure Symfony lorsqu'accédé par la requête client.
+
+Le dossier src contient trois sous-dossiers et via ces derniers, deux des éléments-coeur de notre application: Les Controller et les Models.
+Le dossier Controller possède toutes les classes de type Controller. Il est possible de créer un unique fichier Controller rassemblant toutes les fonctions Controller employées par notre application, mais on préfèrera séparer nos Controllers en différentes classes selon le thème et la fonction des méthodes en question.
+
+Les dossiers Entity et Repository sont liés et sont deux dossiers accessoires à l'ORM Doctrine, chargé de la gestion de notre base de données. Le dossier Entity possède plusieurs classes PHP nommées "Entités", dont la fonction est de représenter les différents objets issus de l'aspect Model de notre application, prêts à être utilisés par cette dernière. Doctrine, en tant qu'ORM (Object-Relational Mapping/Mapper), se charge alors de traduire ces objets définis par les classes Entity en entrées MySQL classiques, sous forme de tables relationnelles.
+La récupération de données précises à partir de ces tables nécessite une intervention supplémentaire de la part du programmeur, et c'est ici que les classes de type Repository entrent en jeu. Classées dans le dossier Repository, les classes de type Repository sont liées à une Entity correspondante et définissent les différentes requêtes DQL (Doctrine Query Language), que Doctrine traduira en SQL (Structured Query Language) afin d'interroger la base de données. Ainsi, les dossiers Entity et Repository possèdent les classes nécessaires à l'emploi de Doctrine (à l'emploi, et non au fonctionnement).
+
+Le dossier Templates contient les différents fichiers écrits selon le langage de template Twig, dont le but est de servir de base pour générer des pages web à envoyer au client.
+
+Le dossier Test est un autre dossier lié aux configurations de bibliothèques de Symfony.
+
+Le dossier Translations, comme son nom l'indique, est dédié aux potentielles traductions, options de langue, que peut prendre en charge notre site.
+
+Le dossier Var contient deux sous-dossiers, cache et logs. Logs contient différnetes informations sur le fonctionnement de notre application qui sont susceptibles être utiles en cas de test ou debug. Le dossier cache contient des fichiers temporarires générés par l'application afin d'accélerer son fonctionnement. En cas de mise à jour de notre site, il est recommandé de vider le cache afin de pouvoir générer de nouveaux fichiers temporaires à jour des changements récents. Le cache peut être manuellement supprimé ou vidéo via une commande de notre terminal:
+	php bin/console cache:clear
+
+Le dossier Vendor contient toutes les bibliothèques utilisées par Symfony. Il est généré par Composer et est mis à jour par ce dernier dès qu'une bibliothèque est ajoutée ou mise à jour. Par convention, dans une application, le dossier Vendor doit contenir toutes les bibliothèques extérieures à l'application. Il s'agit d'une convention généralisée et le dossier Vendor n'est pas exclusif à Symfony. Il ne faut pas chercher à modifier les fichiers situés à l'intérieur de ce dossier étant donné que ces fichiers seront automatiquement écrasés ou effacés à chaque mise à jour de notre application.
+
+-----
+Organisation de notre application: Le Controller
+
+Si index.php est le point de départ de la requête client vers le lancement de notre application, les classes .php de notre Controller sont où nous, en tant que développeurs, commençons le développement de notre application.
+
+Chaque fonction de notre Controller peut être divisée en quatre segments d'importance égale, chacun gérant un aspect de la préparation d'une réponse à la requête client:
+
+	- Les annotations, qui prennent en charge le routage (entre autres)
+	- La déclaration de la fonction, donc son nom, son statut (public), et le nombre de paramètres/arguments pris en charge
+	- Le coeur de la fonction, à savoir la liste des instructions effectuées
+	- Le return de la fonction, qui rendra une Response sous la forme par exemple d'une simple chaine de caractères, ou encore d'un résultat plus complexe via templates obtenu par l'action de Twig.
+
+Les annotations sont placées en amont de la fonction, avec les caractères suivants :
+/**
+*
+*/
+(Ne pas oublier de placer deux étoiles après le premier slash, ou il ne s'agira pas d'une annotation mais d'un simple commentaire, non lu par PHP)
+
+
+
+================================================================================================================
+
+symfony new --full SymfonyBlog // Création d'un nouveau dossier
+
+================================================================================================================
+commandes symfony :
+
+  new                                                            Create a new Symfony project
+  serve                                                          Run a local web server
+  server:stop                                                    Stop the local web server
+  security:check                                                 Check security issues in project dependencies
+  composer                                                       Runs Composer without memory limit
+  console                                                        Runs the Symfony Console (bin/console) for current project
+  php, pecl, pear, php-fpm, php-cgi, php-config, phpdbg, phpize  Runs the named binary using the configured PHP version
+
+Manage a project on Cloud
+
+  login        Log in with your SymfonyConnect account
+  link         Link current git repository to a SymfonyCloud project
+  projects     List active projects
+  envs         List environments
+  env:create   Create an environment
+  tunnel:open  Open SSH tunnels to the app's services
+  ssh          Open an SSH connection to the app container
+  deploy       Deploy an environment
+  domains      List domains
+  vars         List variables
+  user:add     Add a user to the project
+
+Show all commands with symfony.exe help,
+Get help for a specific command with symfony.exe help COMMAND.
+
+================================================================================================================
+
+commandes php bin/console
+
+Usage:
+  command [options] [arguments]
+
+Options:
+  -h, --help            Display help for the given command. When no command is given display help for the list command
+  -q, --quiet           Do not output any message
+  -V, --version         Display this application version
+      --ansi|--no-ansi  Force (or disable --no-ansi) ANSI output
+  -n, --no-interaction  Do not ask any interactive question
+  -e, --env=ENV         The Environment name. [default: "dev"]
+      --no-debug        Switch off debug mode.
+  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Available commands:
+  about                                      Display information about the current project
+  help                                       Display help for a command
+  list                                       List commands
+ assets
+  assets:install                             Install bundle's web assets under a public directory
+ cache
+  cache:clear                                Clear the cache
+  cache:pool:clear                           Clear cache pools
+  cache:pool:delete                          Delete an item from a cache pool
+  cache:pool:list                            List available cache pools
+  cache:pool:prune                           Prune cache pools
+  cache:warmup                               Warm up an empty cache
+ config
+  config:dump-reference                      Dump the default configuration for an extension
+ dbal
+  dbal:run-sql                               Executes arbitrary SQL directly from the command line.
+ debug
+  debug:autowiring                           List classes/interfaces you can use for autowiring
+  debug:config                               Dump the current configuration for an extension
+  debug:container                            Display current services for an application
+  debug:event-dispatcher                     Display configured listeners for an application
+  debug:firewall                             Display information about your security firewall(s)
+  debug:form                                 Display form type information
+  debug:router                               Display current routes for an application
+  debug:translation                          Display translation messages information
+  debug:twig                                 Show a list of twig functions, filters, globals and tests
+  debug:validator                            Display validation constraints for classes
+ doctrine
+  doctrine:cache:clear-collection-region     Clear a second-level cache collection region
+  doctrine:cache:clear-entity-region         Clear a second-level cache entity region
+  doctrine:cache:clear-metadata              Clears all metadata cache for an entity manager
+  doctrine:cache:clear-query                 Clears all query cache for an entity manager
+  doctrine:cache:clear-query-region          Clear a second-level cache query region
+  doctrine:cache:clear-result                Clears result cache for an entity manager
+  doctrine:database:create                   Creates the configured database
+  doctrine:database:drop                     Drops the configured database
+  doctrine:database:import                   Import SQL file(s) directly to Database.
+  doctrine:ensure-production-settings        Verify that Doctrine is properly configured for a production environment
+  doctrine:mapping:convert                   [orm:convert:mapping] Convert mapping information between supported formats
+  doctrine:mapping:import                    Imports mapping information from an existing database
+  doctrine:mapping:info
+  doctrine:migrations:current                [current] Outputs the current version
+  doctrine:migrations:diff                   [diff] Generate a migration by comparing your current database to your mapping information.
+  doctrine:migrations:dump-schema            [dump-schema] Dump the schema for your database to a migration.
+  doctrine:migrations:execute                [execute] Execute one or more migration versions up or down manually.
+  doctrine:migrations:generate               [generate] Generate a blank migration class.
+  doctrine:migrations:latest                 [latest] Outputs the latest version
+  doctrine:migrations:list                   [list-migrations] Display a list of all available migrations and their status.
+  doctrine:migrations:migrate                [migrate] Execute a migration to a specified version or the latest available version.
+  doctrine:migrations:rollup                 [rollup] Rollup migrations by deleting all tracked versions and insert the one version that exists.
+  doctrine:migrations:status                 [status] View the status of a set of migrations.
+  doctrine:migrations:sync-metadata-storage  [sync-metadata-storage] Ensures that the metadata storage is at the latest version.
+  doctrine:migrations:up-to-date             [up-to-date] Tells you if your schema is up-to-date.
+  doctrine:migrations:version                [version] Manually add and delete migration versions from the version table.
+  doctrine:query:dql                         Executes arbitrary DQL directly from the command line
+  doctrine:query:sql                         Executes arbitrary SQL directly from the command line.
+  doctrine:schema:create                     Executes (or dumps) the SQL needed to generate the database schema
+  doctrine:schema:drop                       Executes (or dumps) the SQL needed to drop the current database schema
+  doctrine:schema:update                     Executes (or dumps) the SQL needed to update the database schema to match the current mapping metadata
+  doctrine:schema:validate                   Validate the mapping files
+ lint
+  lint:container                             Ensure that arguments injected into services match type declarations
+  lint:twig                                  Lint a Twig template and outputs encountered errors
+  lint:xliff                                 Lint an XLIFF file and outputs encountered errors
+  lint:yaml                                  Lint a YAML file and outputs encountered errors
+ make
+  make:auth                                  Creates a Guard authenticator of different flavors
+  make:command                               Creates a new console command class
+  make:controller                            Creates a new controller class
+  make:crud                                  Creates CRUD for Doctrine entity class
+  make:docker:database                       Adds a database container to your docker-compose.yaml file
+  make:entity                                Creates or updates a Doctrine entity class, and optionally an API Platform resource
+  make:fixtures                              Creates a new class to load Doctrine fixtures
+  make:form                                  Creates a new form class
+  make:message                               Creates a new message and handler
+  make:messenger-middleware                  Creates a new messenger middleware
+  make:migration                             Creates a new migration based on database changes
+  make:registration-form                     Creates a new registration form system
+  make:reset-password                        Create controller, entity, and repositories for use with symfonycasts/reset-password-bundle
+  make:serializer:encoder                    Creates a new serializer encoder class
+  make:serializer:normalizer                 Creates a new serializer normalizer class
+  make:subscriber                            Creates a new event subscriber class
+  make:test                                  [make:unit-test|make:functional-test] Creates a new test class
+  make:twig-extension                        Creates a new Twig extension class
+  make:user                                  Creates a new security user class
+  make:validator                             Creates a new validator and constraint class
+  make:voter                                 Creates a new security voter class
+ router
+  router:match                               Help debug routes by simulating a path info match
+ secrets
+  secrets:decrypt-to-local                   Decrypt all secrets and stores them in the local vault
+  secrets:encrypt-from-local                 Encrypt all local secrets to the vault
+  secrets:generate-keys                      Generate new encryption keys
+  secrets:list                               List all secrets
+  secrets:remove                             Remove a secret from the vault
+  secrets:set                                Set a secret in the vault
+ security
+  security:encode-password                   Encode a password
+  security:hash-password                     Hash a user password
+ server
+  server:dump                                Start a dump server that collects and displays dumps in a single place
+  server:log                                 Start a log server that displays logs in real time
+ translation
+  translation:pull                           Pull translations from a given provider.
+  translation:push                           Push translations to a given provider.
+  translation:update                         Update the translation file
