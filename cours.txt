@@ -115,6 +115,46 @@ Les annotations sont placées en amont de la fonction, avec les caractères suiv
 *
 */
 (Ne pas oublier de placer deux étoiles après le premier slash, ou il ne s'agira pas d'une annotation mais d'un simple commentaire, non lu par PHP)
+Les annotations permettent de placer des informations relatives a la fonction qu'elle precedent, mais dans le cas du Controller, nous permettant également de déterminer la Route qui mène a notre fonction. La route est un moyen, par la reception d'une requête client via URL, de repérer a quelle fonction faire appel.
+
+Notre route est spécifiée par @Route, puis par l'entrée de deux paramètres:
+
+	/**
+	* @Route("/general", name"route_generale")
+	*/
+
+Le premier paramètre nous permettra d'indiquer quel est l4URL a entrer pour parvenir a cette fonction, tandis que le second paramètre est le nom de la Route attribuer aa cette fonction. Si le premier paramètre est nécessaire pour les requête s clients, le nom attribué a la route sera celui qui sera le plus utile coté développeur, étant donné que la generation automatique d'URL nécessite l'entré du nom de route correspondante.
+
+Nous pouvons aussi définir des segments optionnels de route, lesquels seront transmis a notre fonction et seront donc susceptibles d'être intégrés a la logique algorithmique.
+Pour cela, il faudra impérativement ajouter un objet de la classe Request dans notre fonction.
+
+	/**
+	* @Route("/general/{index}", name"route_generale")
+	*/
+	public function general(Request $request, $index): Response
+	{
+		//Fonction
+	}
+Le paramètre est indiquer via les accolades. La valeur indiquée par la requête client a la place de ce segment ( dans notre exemple, $index). Nous pouvons alors reprendre cette valeur et l'utiliser comme bon nous semble.
+
+Ne pas renseigner ce paramètre de la part du client résultera en une erreur de type 404, la route étant considéré comme non trouvée.
+Cependant, en indiquant une valeur par défaut au segment d'URL via les paramètres, remplir ce dernier peut devenir optionnel
+	/**
+	* @Route("/general/{index}", name"route_generale")
+	*/
+	public function general(Request $request, $index = false)
+	{
+		//Fonction
+	}
+
+Il existe une commande spéciale pour obtenir la liste de toutes les routes actives sur notre application via le terminal:
+	php bin/console debug:router
+
+
+
+
+
+
 
 
 

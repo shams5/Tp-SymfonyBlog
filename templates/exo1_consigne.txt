@@ -1,0 +1,7 @@
+CONSIGNE:
+
+- Aller sur la page Sticky-Footer-Navbar présentée dans la liste d'exemples de la page officielle Bootstrap
+- Récupérer le code source de la page Sticky-Footer-Navbar et l'incorporer dans notre page base.html.twig de manière à ce que cette structure de base soit chargée au sein de notre application à chaque fois que nous utilisons base.html.twig en tant que fichier hérité
+- Prendre soin de ne pas perdre les différents blocks Twig de notre base.html.twig ni charger une deuxième les fichiers bootstrap en insérant le code: la source de notre bootstrap doit rester les deux fichiers présents dans notre dossier assets
+- Récupérer le code du fichier css sticky-footer-navbar.css, le placer à l'intérieur d'un nouveau fichier sticky-footer-navbar.css à l'intérieur de notre dossier css à l'intérieur du dossier assets, et utiliser la fonction Twig asset() afin de l'incorporer dans notre page web
+- Placer les différents blocks Twig de manière efficace afin que, lorsque nous chargeons la page index.html.twig, nous ayons la structure Sticky-Footer-Navbar mais avec, à la place du bulletin "Sticky footer with fixed navbar", le contenu de notre <div> de Bienvenue sur IndexController présent dans index.html.twig
