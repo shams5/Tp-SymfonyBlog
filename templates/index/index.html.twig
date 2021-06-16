@@ -1,15 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello IndexController!{% endblock %}
-
-{% block main %}
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/SymfonyBlog/src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/SymfonyBlog/templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block title %}Hello Visiteur!
 {% endblock %}
 
+{% block body %}
+	<h1 class="mt-5">Hello
+		{{ controller_name }}! ✅</h1>
+	<p>Ceci est le contenu d'une autre variable:
+		{{ autre_variable }}</p>
+	<p>Ce message amical vous vient:</p>
+	<ul>
+		<li>Your controller at
+			<code>
+				<a href="{{ 'C:/wamp64/www/SymfonyBlog/src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a>
+			</code>
+		</li>
+		<li>Your template at
+			<code>
+				<a href="{{ 'C:/wamp64/www/SymfonyBlog/templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a>
+			</code>
+		</li>
+	</ul>
+{% endblock %}
