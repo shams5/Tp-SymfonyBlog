@@ -24,7 +24,7 @@ class IndexController extends AbstractController
 
         return $this->render('index/index.html.twig', [
             'controller_name' => '{Ceci est une variable Twig}',
-            'autre_variable' => $bulletin,
+            'bulletin' => $bulletin,
         ]);
     }
 
