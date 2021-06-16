@@ -4,11 +4,9 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="mt-5">Hello
-		{{controller_name}}
-		!</h1>
+	<h1 class="mt-5">Liste des Bulletins</h1>
 
-	<div class="alert alert-info" role="alert">
+	<div class="alert alert-info">
 		<h3 class="display-5">{{bulletin.title|upper}}</h3>
 		<p class="h3">{{bulletin.category}}</p>
 		<p>{{bulletin.content}}</p>
