@@ -8,10 +8,10 @@
 		{{controller_name}}
 		!</h1>
 
-	<div>
-		<h3>{{bulletin.title}}</h3>
-		<p>{{bulletin.category}}</p>
+	<div class="alert alert-info" role="alert">
+		<h3 class="display-5">{{bulletin.title|upper}}</h3>
+		<p class="h3">{{bulletin.category}}</p>
 		<p>{{bulletin.content}}</p>
-		<p>{{bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris')}}</p>
+		<p class="lead">{{bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris')}}</p>
 	</div>
 {% endblock %}
