@@ -280,6 +280,7 @@ Available commands:
   make:crud                                  Creates CRUD for Doctrine entity class
   make:docker:database                       Adds a database container to your docker-compose.yaml file
   make:entity                                Creates or updates a Doctrine entity class, and optionally an API Platform resource
+  make:entity --regenerate App               Génère des setters et des getters pour tous les attributs qui en sont dépourvus (sauf $id)
   make:fixtures                              Creates a new class to load Doctrine fixtures
   make:form                                  Creates a new form class
   make:message                               Creates a new message and handler
