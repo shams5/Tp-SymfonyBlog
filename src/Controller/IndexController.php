@@ -24,7 +24,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/response/{option}", name="index_response")
      */
-    public function indexResponse(Request $request, $option): Response
+    public function indexResponse(Request $request, $option = "vert"): Response
     {
         //Ctrl + clic droit -> Import All Classes
 
@@ -44,5 +44,13 @@ class IndexController extends AbstractController
 
         return new Response("<div style='width:200px; height:300px; background-color : " . $figure . ";'></div>");
         // return new Response($option);
+    }
+
+    /**
+     * @Route("/cheatsheet", name="index_cheatsheet")
+     */
+    public function indexCheatsheet(): Response
+    {
+        return $this->render('index/cheatsheet.html.twig');
     }
 }

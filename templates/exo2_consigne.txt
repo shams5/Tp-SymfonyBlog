@@ -1,0 +1,10 @@
+
+Done - Dans IndexController, créer une nouvelle fonction nommée indexCheatsheet(), avec comme URL de Route (/cheatsheet) et comme name "index_cheatsheet"
+Done - Cette fonction doit retourner un render de la page cheatsheet.html.twig, localisée dans le dossier index.
+Done - Créer la page cheatsheet.html.twig, qui héritera de la page base.html.twig, et qui, à l'intérieur de son block body, doit contenir les balise <article> suivantes:
+        - Typography
+        - Alerts
+        - Buttons
+        - Lists
+        - Pagination
+- Créer un sommaire à l'en-tête de votre page cheatsheet, sous forme liste bootstrap (selon celle que vous désirez), qui utilise des liens hypertextes anchor (#), afin de descendre à tel ou tel <article> selon son id.
