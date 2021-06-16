@@ -5,20 +5,13 @@
 
 {% block body %}
 	<h1 class="mt-5">Hello
-		{{ controller_name }}! ✅</h1>
-	<p>Ceci est le contenu d'une autre variable:
-		{{ bulletin.title }}</p>
-	<p>Ce message amical vous vient:</p>
-	<ul>
-		<li>Your controller at
-			<code>
-				<a href="{{ 'C:/wamp64/www/SymfonyBlog/src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a>
-			</code>
-		</li>
-		<li>Your template at
-			<code>
-				<a href="{{ 'C:/wamp64/www/SymfonyBlog/templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a>
-			</code>
-		</li>
-	</ul>
+		{{controller_name}}
+		!</h1>
+
+	<div>
+		<h3>{{bulletin.title}}</h3>
+		<p>{{bulletin.category}}</p>
+		<p>{{bulletin.content}}</p>
+		<p>{{bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris')}}</p>
+	</div>
 {% endblock %}
