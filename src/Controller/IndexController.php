@@ -50,17 +50,15 @@ class IndexController extends AbstractController
     {
 
         $bulletinInfos = [
-            ["title" => "Bleu", "category" => "General", "content" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."],
-            ["title" => "Rouge", "category" => "Danger", "content" => "Dans une ville de province, le jour où sa femme accouche, un pharmacien de cinquante ans perd un peu la tête et met du cyanure dans son célèbre sirop Soleil. S'étant aperçu de la méprise, il passe la nuit à retrouver les cinq clients à qu'il a vendu les flacons du sirop. Le premier est un notable, le second, un assureur, le troisième, un nain travaillant dans un cirque et le quatrième, un ancien collaborateur responsable de la mort d'un résistant..."],
-            ["title" => "Orange", "category" => "Warning", "content" => "Ces petits poils à peine visibles à l’œil nu, sont remplis d’un cocktail de substances responsables de la rougeur, la brulure et de la démangeaison associé à la piqure de l’ortie. Parmi ces composés, on peut en citer deux majeurs : l’acide formique et l’histamine.
+            ["title" => "Bleu", "category" => "info", "content" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."],
+            ["title" => "Rouge", "category" => "danger", "content" => "Dans une ville de province, le jour où sa femme accouche, un pharmacien de cinquante ans perd un peu la tête et met du cyanure dans son célèbre sirop Soleil. S'étant aperçu de la méprise, il passe la nuit à retrouver les cinq clients à qu'il a vendu les flacons du sirop. Le premier est un notable, le second, un assureur, le troisième, un nain travaillant dans un cirque et le quatrième, un ancien collaborateur responsable de la mort d'un résistant..."],
+            ["title" => "Orange", "category" => "warning", "content" => "Ces petits poils à peine visibles à l’œil nu, sont remplis d’un cocktail de substances responsables de la rougeur, la brulure et de la démangeaison associé à la piqure de l’ortie. Parmi ces composés, on peut en citer deux majeurs : l’acide formique et l’histamine.
 
             Les poils des orties sont terminés par une sorte de petit pic en silice qui se casse au moindre contact. Il laisse alors l’extrémité du poil urticant en forme de biseau traverser facilement. A la base du poil, comme tu peux le voir si dessous, il y a une glande qui produit les composés urticants. Ces composés sont stockés à l’intérieur du poil dans une vacuole et sont libérés une fois le poil cassé.
             
             Comme tu viens de le comprendre le poil une fois cassé et se trouvant dans la peau, le cocktail urticant est directement libéré dans notre corps !"],
-            ["title" => "Jaune", "category" => "Virus", "content" => "blablablablablablablablablablablablablablablablablablablablablablablablablablablablabla"],
-            ["title" => "Violet", "category" => "Joie", "content" => "Dans les années 1900, Celie, une jeune fille noire du sud des États-Unis, vit avec sa jeune sœur Nettie et son père dans une plantation de coton. Son père l'oblige \"à faire ce que sa mère ne veut plus faire\", et elle continue après la mort de celle-ci. Celie supporte cette situation en se raccrochant à son affection pour sa sœur, qui risque elle aussi d'être victime de son père. Elle met au monde deux enfants, un garçon et une fille, que son père fait rapidement adopter. Le père finit par se remarier avec une femme de l'âge de sa fille aînée."],
-            ["title" => "Vert", "category" => "Libre", "content" => "Forrest Gump est un personnage fictif, un simple d'esprit tout d'abord apparu dans le roman homonyme de Winston Groom en 1986 puis dans le film homonyme réalisé par Robert Zemeckis en 1994. Forrest est interprété par Michael Conner Humphreys enfant et par Tom Hanks en tant qu'adulte. Le personnage du livre est différent de celui du film. En 2008, il a été nommé le 20e plus grand personnage de cinéma de tous les temps par le magazine Empire1."],
-
+            ["title" => "Noir", "category" => "dark", "content" => "blablablablablablablablablablablablablablablablablablablablablablablablablablablablabla"],
+            ["title" => "Vert", "category" => "success", "content" => "Forrest Gump est un personnage fictif, un simple d'esprit tout d'abord apparu dans le roman homonyme de Winston Groom en 1986 puis dans le film homonyme réalisé par Robert Zemeckis en 1994. Forrest est interprété par Michael Conner Humphreys enfant et par Tom Hanks en tant qu'adulte. Le personnage du livre est différent de celui du film. En 2008, il a été nommé le 20e plus grand personnage de cinéma de tous les temps par le magazine Empire1."],
         ];
 
         $bulletins = [];
@@ -105,7 +103,6 @@ class IndexController extends AbstractController
         }
 
         return new Response("<div style='width:200px; height:300px; background-color : " . $figure . ";'></div>");
-        return new Response($option);
     }
 
     /**

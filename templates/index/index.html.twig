@@ -20,7 +20,7 @@
 			{% set i = i + 1 %}
 		{% endfor %}
 	{% else %}
-		<div class="alert alert-info">
+		<div class="alert alert-{{ bulletins.category }}">
 			<h3 class="display-5">{{ bulletins.title|upper }}</h3>
 			<p class="h3">{{bulletins.category}}</p>
 			<p>{{bulletins.content}}</p>
