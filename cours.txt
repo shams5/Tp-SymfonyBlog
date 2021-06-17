@@ -273,14 +273,20 @@ Migration :
 les commandes effectuées pour rentrer les attributs d'une classe dans la base de données sont les deux suivantes :
 
 php bin/console make:migration
+-> Invite Doctrine à comparer l'état de nos Entity avec la structure de notre base de données et à générer à l'intérieur d'un fichier php les différentes commandes SQL nécessaires pour synchroniser la seconde avec les premières
+
 php bin/console doctrine:migrations:migrate (puis répondre yes)
+-> Applique le contenu des différents fichiers php de migration générés par Doctrine.
 
 ========================================================================================================================================================================================================================================================================================================================================================
 
-Installation de la bibliothèque orm-fixtures :
+Installation de la bibliothèque orm-fixtures grâce à l'outil composer:
 
 composer require --dev orm-fixtures
+--dev signifie que cette bibliothèque n'est active que Lorsque notre application est en mode développeur
 (On peut trouver d'autres bibliothèques sur https://flex.symfony.com/)
+
+
 
 ========================================================================================================================================================================================================================================================================================================================================================
 
