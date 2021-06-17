@@ -6,10 +6,12 @@
 {% block body %}
 	<h1 class="mt-5">Liste des Bulletins</h1>
 	{#! On accéde aux éléments d'un objet avec la dot notation ? #}
-	<div class="alert alert-info">
-		<h3 class="display-5">{{bulletin.title|upper}}</h3>
-		<p class="h3">{{bulletin.category}}</p>
-		<p>{{bulletin.content}}</p>
-		<p class="lead">{{bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris')}}</p>
-	</div>
+	{% for bulletin in bulletins %}
+		<div class="alert alert-info">
+			<h3 class="display-5">{{bulletin.title|upper}}</h3>
+			<p class="h3">{{bulletin.category}}</p>
+			<p>{{bulletin.content}}</p>
+			<p class="lead">{{bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris')}}</p>
+		</div>
+	{% endfor %}
 {% endblock %}
