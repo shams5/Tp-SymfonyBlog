@@ -1,7 +1,8 @@
--
--
------
+========================================================================================================================================================================================================================================================================================================================================================
+
 14/06/2021
+
+========================================================================================================================================================================================================================================================================================================================================================
 
 Installation de Symfony
 
@@ -14,9 +15,13 @@ Afin de pouvoir installer Symfony, nous avons besoin:
 	Symfony:
 		https://symfony.com/download
 
+
+
 Windows:
 	Installer les différents fichiers .exe dans l'ordre Git -> Composer -> Symfony
+
 Mac:
+[
 	Afin de pouvoir ajouter le PATH de Symfony, ne pas oublier d'ajouter la ligne:
 		 export PATH="$HOME/.symfony/bin:$PATH"
 	à notre terminal.
@@ -26,7 +31,7 @@ Mac:
 		php composer-setup.php
 		php -r "unlink('composer-setup.php');"
 		sudo mv composer.phar /usr/local/bin/composer
-
+]
 Si l'Installer vous demande l'installation automatique du PATH, répondre oui.
 Sur Composer:
 	Ne pas activer le mode développeur
@@ -39,13 +44,21 @@ Afin de savoir si Symfony et le PATH sont bien installés sur notre ordinateur, 
 	symfony -v
 Dans le cas d'une installation réussie, la version actuelle de Symfony ainsi que la liste des commandes disponibles pour l'application devrait être présentée.
 
+========================================================================================================================================================================================================================================================================================================================================================
+
+Démarrage
+
 Dans le cadre de notre utilisation du framework Symfony, nous allons utiliser WAMP/XAMPP/MAMP afin de gérer le serveur SQL mais nous allons utiliser un serveur local spécial pour notre site web, fourni par Symfony CLI que nous avons installé au préalable. Il nous suffit, pour lancer ce serveur local, de taper la commande suivante, dans le répertoire de notre application:
+
 	symfony server:start -d
+
 Le -d permet de lancer le serveur en arrière-plan, et ainsi de pouvoir continuer à utiliser notre terminal.
 Il ne faut pas oublier de placer notre terminal dans le répertoire de notre projet avant de taper cette commande.
 Il vous suffira alors d'entrer l'URL localhost:8000 (ou 127.0.0.1:8000) pour accéder à votre application web.
 
----
+
+========================================================================================================================================================================================================================================================================================================================================================
+
 La structure théorique du framework Symfony
 
 Lorsque nous développons une application en utilisant notre framework, nous allons utiliser une architecture particulière, qui est nommée MVC, pour Model-View-Controller (Modèle, Vue, Controller). Les trois composants de cet acronyme sont trois Patrons de Conception (Design Patterns), qui sont associés pour fournir la logique de base de notre application.
@@ -54,17 +67,21 @@ Qu'est-ce qu'un Design Pattern?
 Un Design Pattern/Patron de Conception est un arrangement caractéristique de modules, reconnu comme bonne pratique en réponse à un problème de conception de logiciel. Le Design Pattern décrit une solution standard, utilisable de la conception de différents logiciels. C'est un formalisme conçu pour répondre à des problèmes particuliers avec une méthode prédéfinie.
 
 
-La structure de Symfony est donc basée sur un paradigme Model-View-Controller, ou MVC. La structure MVC est un ensemble de Design Patterns très utilisée dans le cadre des applications possédant une interface fraphique et nécessitant une interaction de la part de l'utilisateur.
+La structure de Symfony est donc basée sur un paradigme Model-View-Controller, ou MVC. La structure MVC est un ensemble de Design Patterns très utilisée dans le cadre des applications possédant une interface graphique et nécessitant une interaction de la part de l'utilisateur.
 Chaque élément de ce paradigme joue un rôle particulier:
-	Le Controller regroupe tous les programmes PHP nécessaires au bon fonctionnement de l'application. Le Controller n'est pas seulement la classe PHP COntroller applée ou la fonction correspondant à la route que nous avons requise, mais désigne le processus entier d'appel aux différentes bibliothèques et aux différents services nécessaires au bon traitement des données. C'est également le Controller qui se chargera d'appeler les Models nécessaires dans le cadre de la requête Client, et qui déterminera quels sont les fichiers de Vue nécessaires pour générer la page web à envoyer en résultat final. En bref, le Controller est le coeur de notre application.
+
+	Le Controller regroupe tous les programmes PHP nécessaires au bon fonctionnement de l'application. Le Controller n'est pas seulement la classe PHP Controller applée ou la fonction correspondant à la route que nous avons requise, mais désigne le processus entier d'appel aux différentes bibliothèques et aux différents services nécessaires au bon traitement des données. C'est également le Controller qui se chargera d'appeler les Models nécessaires dans le cadre de la requête Client, et qui déterminera quels sont les fichiers de Vue nécessaires pour générer la page web à envoyer en résultat final. En bref, le Controller est le coeur de notre application.
 
 	Le Model regroupe toutes les donnéees employées par notre application. Il s'agit des données persistentes, telles que celles enregistrées dans notre base de données, mais pas seulement. Tout ce qui est information propre à être traitée par notre application et à être envoyée au client fait partie de l'aspect Model: il peut s'agir des informations stockées dans la base de données, mais également des fichiers xml annexes, des fichiers texte, ou encore des images. Le Model est donc la matière de l'application, celle que notre Controller doit, par son organisation, ordonner et distribuer de manière harmonieuse.
 	Dans notre cas, nous allons avant tout nous intéresser à la partie du Model qui est stockées dans notre base de données. Pour cela, nous allons utiliser la bibliothèque Doctrine, qui est le gestionnaire de base de données par défaut de Symfony. Dans notre application, Doctrine se chargera d'administrer nos Models sous forme d'une classe dite Entity (Entité), dont les informations seront traitées et récupérées via des classes spéciales nommées les Repository. Le Repository est une classe spécialisée, possédant plusieurs fonctions dont le but est la récupération d'informations précises contenues par les Entity, informations qui seront ensuite transmises au Controller pour leur traitement.
 
 	La View regroupe tous les fichiers nécessaires à la génération de notre page web à retourner en réponse à la requête client. Si le Model contient la matière de notre application Symfony et que le Controller s'occupe de son organisation, le but de la View est de présenter cette information de manière efficace et intelligible, via une interface graphique. La View est idéalement composée de plusieurs fichiers regroupés dans le dossier Templates, offrant les templates (c'est-à-dire les "gabarits") nécessaires pour expliciter et contextualiser les informations du Model récupéré sous décision du Controller. Le code PHP est laissé aussi minimal que possible dans ces fichiers de vue, dans l'idéal de séparation des rôles. Dans notre cas, nous allons utiliser un langage de template, Twig, qui a pour but de simplifier la maigre part de PHP de la partie vue et de la rendre aussi facile à lire et à comprendre que possible.
 
+========================================================================================================================================================================================================================================================================================================================================================
 
 15/06/2021
+
+========================================================================================================================================================================================================================================================================================================================================================
 
 La structure et l'arborescence de notre application Symfony
 
@@ -93,12 +110,14 @@ Le dossier Test est un autre dossier lié aux configurations de bibliothèques d
 
 Le dossier Translations, comme son nom l'indique, est dédié aux potentielles traductions, options de langue, que peut prendre en charge notre site.
 
-Le dossier Var contient deux sous-dossiers, cache et logs. Logs contient différnetes informations sur le fonctionnement de notre application qui sont susceptibles être utiles en cas de test ou debug. Le dossier cache contient des fichiers temporarires générés par l'application afin d'accélerer son fonctionnement. En cas de mise à jour de notre site, il est recommandé de vider le cache afin de pouvoir générer de nouveaux fichiers temporaires à jour des changements récents. Le cache peut être manuellement supprimé ou vidéo via une commande de notre terminal:
+Le dossier Var contient deux sous-dossiers, cache et logs. Logs contient différentes informations sur le fonctionnement de notre application qui sont susceptibles être utiles en cas de test ou debug. Le dossier cache contient des fichiers temporaires générés par l'application afin d'accélerer son fonctionnement. En cas de mise à jour de notre site, il est recommandé de vider le cache afin de pouvoir générer de nouveaux fichiers temporaires à jour des changements récents. Le cache peut être manuellement supprimé ou vidé via une commande de notre terminal:
+
 	php bin/console cache:clear
 
 Le dossier Vendor contient toutes les bibliothèques utilisées par Symfony. Il est généré par Composer et est mis à jour par ce dernier dès qu'une bibliothèque est ajoutée ou mise à jour. Par convention, dans une application, le dossier Vendor doit contenir toutes les bibliothèques extérieures à l'application. Il s'agit d'une convention généralisée et le dossier Vendor n'est pas exclusif à Symfony. Il ne faut pas chercher à modifier les fichiers situés à l'intérieur de ce dossier étant donné que ces fichiers seront automatiquement écrasés ou effacés à chaque mise à jour de notre application.
 
------
+========================================================================================================================================================================================================================================================================================================================================================
+
 Organisation de notre application: Le Controller
 
 Si index.php est le point de départ de la requête client vers le lancement de notre application, les classes .php de notre Controller sont où nous, en tant que développeurs, commençons le développement de notre application.
@@ -115,7 +134,7 @@ Les annotations sont placées en amont de la fonction, avec les caractères suiv
 *
 */
 (Ne pas oublier de placer deux étoiles après le premier slash, ou il ne s'agira pas d'une annotation mais d'un simple commentaire, non lu par PHP)
-Les annotations permettent de placer des informations relatives a la fonction qu'elle precedent, mais dans le cas du Controller, nous permettant également de déterminer la Route qui mène a notre fonction. La route est un moyen, par la reception d'une requête client via URL, de repérer a quelle fonction faire appel.
+Les annotations permettent de placer des informations relatives a la fonction qu'elle précèdent, mais dans le cas du Controller, nous permettant également de déterminer la Route qui mène a notre fonction. La route est un moyen, par la reception d'une requête client via URL, de repérer a quelle fonction faire appel.
 
 Notre route est spécifiée par @Route, puis par l'entrée de deux paramètres:
 
@@ -123,9 +142,9 @@ Notre route est spécifiée par @Route, puis par l'entrée de deux paramètres:
 	* @Route("/general", name"route_generale")
 	*/
 
-Le premier paramètre nous permettra d'indiquer quel est l4URL a entrer pour parvenir a cette fonction, tandis que le second paramètre est le nom de la Route attribuer aa cette fonction. Si le premier paramètre est nécessaire pour les requête s clients, le nom attribué a la route sera celui qui sera le plus utile coté développeur, étant donné que la generation automatique d'URL nécessite l'entré du nom de route correspondante.
+Le premier paramètre nous permettra d'indiquer quel est l'url a entrer pour parvenir a cette fonction, tandis que le second paramètre est le nom de la Route attribué à cette fonction. Si le premier paramètre est nécessaire pour les requêtes clients, le nom attribué à la route sera celui qui sera le plus utile coté développeur, étant donné que la generation automatique d'url nécessite l'entré du nom de route correspondante.
 
-Nous pouvons aussi définir des segments optionnels de route, lesquels seront transmis a notre fonction et seront donc susceptibles d'être intégrés a la logique algorithmique.
+!! Nous pouvons aussi définir des segments optionnels de route, lesquels seront transmis a notre fonction et seront donc susceptibles d'être intégrés a la logique algorithmique !!
 Pour cela, il faudra impérativement ajouter un objet de la classe Request dans notre fonction.
 
 	/**
@@ -138,7 +157,7 @@ Pour cela, il faudra impérativement ajouter un objet de la classe Request dans 
 Le paramètre est indiquer via les accolades. La valeur indiquée par la requête client a la place de ce segment ( dans notre exemple, $index). Nous pouvons alors reprendre cette valeur et l'utiliser comme bon nous semble.
 
 Ne pas renseigner ce paramètre de la part du client résultera en une erreur de type 404, la route étant considéré comme non trouvée.
-Cependant, en indiquant une valeur par défaut au segment d'URL via les paramètres, remplir ce dernier peut devenir optionnel
+Cependant, en indiquant une valeur par défaut au segment d'url via les paramètres, remplir ce dernier peut devenir optionnel
 	/**
 	* @Route("/general/{index}", name"route_generale")
 	*/
@@ -148,23 +167,117 @@ Cependant, en indiquant une valeur par défaut au segment d'URL via les paramèt
 	}
 
 Il existe une commande spéciale pour obtenir la liste de toutes les routes actives sur notre application via le terminal:
+
 	php bin/console debug:router
 
+========================================================================================================================================================================================================================================================================================================================================================
+
+17/06/2021
+
+========================================================================================================================================================================================================================================================================================================================================================
+
+Twig
 
 
+Lorsque nous terminons notre fonction, nous lui indiquons quel type d'objet de type Reponse rendre. En utilisant $this->render, nous indiquons à Symfony que nous allons transiter par Twig afin de générer la Response que nous désirons envoyer à la requête client.
+$this->render est une fonction particulière qui rendra une erreur si notre installation n'intègre pas Twig. Cette fonction prend deux arguments: une chaîne de caractères qui servira à indiquer l'adresse du fichier twig qui sera utilisé pour générer notre page, et un tableau associatif qui comportera les différentes variables à porter sur notre page Twig.
+
+Twig est avant tout un langage de template. C'est un langage visant à alléger le code de notre page web en remplaçant tout le PHP par une série de balises à l'apparence plus légère. Il est possible d'installer Symfony sans utiliser Twig, et il est également possible d'utiliser Twig sur un projet PHP qui n'emploie pas Symfony. Cependant, Twig est optimisé pour Symfony et, dans sa configuration de base, Symfony installe Twig par défaut.
+
+Encore une fois, la principale qualité (et l'intérêt) de Twig réside dans son hyper-simplicité. Twig est un langage qui se greffe au HTML. Chacune des instructions du langage de template sera effectué selon trois types de balise:
+	{{ *** }} -> Les doubles accolades sont utilisées pour afficher le contenu d'une variable ou le résultat d'une expression
+	{% *** %} -> L'accolade-pourcentage est utilisée dans le cadre des structures de contrôle (if, foreach, include, ou encore déclaration d'héritage)
+	{# *** #} -> L'accolade-dièse sert à écrire des commentaires. Contrairement aux commentaires HTML, ces commentaires Twig ne seront pas visibles depuis le code-source de la page.
+	<!--
+		Ceci est un commentaire HTML (visible depuis le code source)
+	-->
+
+Twig s'apprend rapidement et la documentation* indique toutes les expressions nécessaires à la création d'un template. Le code étant logiquement très proche du PHP, passer de PHP à Twig s'effectue instantanément.
+* https://twig.symfony.com/doc/2.x/
 
 
+Twig adopte un système de blocs pour se structurer. En observant une page Twig, nous constatons rapidement qu'à l'exception de certaines pages (telles que base.html.twig), le code de nos pages Twig est inséré à l'intérieur de blocs à la syntaxe suivante:
+
+	{% block foo %}
+		...contenu du bloc...
+	{% endblock %}
+
+	{% block bar %}
+		...contenu du bloc...
+	{% endblock %}
+
+Comme nous pouvons le constater, la structure des accolades de ces blocs suit un schéma {% %}, ce qui indique une forme de structure de contrôle. Ces blocs sont conçus pour préparer un type d'héritage particulier de Twig.
+Par héritage, il faut entendre la récupération du code d'une page-mère au profit d'une page fille. La page Twig héritant récupère toute la structure de la page-mère avant de modifier (déterminer) le contenu des blocs présents dans cette page. Ainsi, il est impossible pour une page héritante de comprendre un code qui ne se trouve pas à l'intérieur d'un bloc délimité.
+
+Ainsi, il est donc possible (et recommandé) de rédiger toute la structure de base d'une page web dans une page dédiée, telle que base.html.twig, et de réserver un bloc à l'intérieur de notre page, pour la page Twig héritant. Ainsi, il suffira pour la page Twig (que nous allons indiquer dans notre controller) d'hériter de base.html.twig pour que le layout de base soit automatiquement recopié tandis que notre template héritant sera aussi bref que possible.
+
+ATTENTION: Le contenu d'un bloc hérité n'affiche pas les valeurs saisies à l'intérieur du parent à moins que le développeur n'en exprime le désir. Afin de pouvoir récupérer le contenu d'un bloc twig du fichier mère, il est nécessaire de faire à la fonction
+	{{ parent() }}
+Cette fonction récupère les instruction présentes à l'intérieur du bloc du fichier parent et le recopie à l'emplacement de la fonction.
+
+14/04/21
+
+A propos de certaines fonctionnalités Twig
+
+Les Filtres
+
+Les filtres sont placés après une barre/pipe (AltGr+6 -> |), dans une balise Twig à double accolade. Leur fonction est de transformer la valeur inscrite dans la double accolade en question.
+
+	{{ value|upper }} -> Transforme la chaine de caractères présente dans value en mettant chaque lettre en majuscule.
+	{{ text|nl2br }} -> Remplace les newline (/nl) utilisées dans la base de données en retour à la ligne de type HTML (<br>)
+
+Les filtres sont très utiles pour pouvoir modifier une valeur transmise via le Controller et l'adapter à l'interface présentée à l'utilisateur.
+
+Les Fonctions
+
+Les fonctions possèdent une logique semblables aux filtres mais possèdent une syntaxe plus classique. La fonction, en comparaison au filtre, une action plus radicale en ce qu'elle transforme la valeur ou le tableau présenté à une fin autre qu'un affichage plus aisé.
+	{{ max([1, 2, 3]) }} -> Retourne la valeur la plus élevée (les autres valeurs sont donc perdues)
+	{{ dump(value) }} -> Dump affiche le contenue d'une valeur avec quantité de détails et est très importante dans le processus de debug
+
+Les Tests
+
+Les test sont des entrées spéciales, dans des balises à double accolade, ayant pour but de vérifier l'exactitude d'une affirmation. Ils sont reconnus par l'usage du mot-clef "is"
+	{% if foo is empty %} -> empty: vérifie si la variable concernée est vide, rend true dans ce cas ({% %} est utilisé en raison de la structure de contrôle if)
+	{{ bar is even }} -> even: retourne True si "bar" est un nombre pair
 
 
+Une fonction Twig particulière: path()
 
+	{{ path('route_foo') }}
+La fonction path() est une fonction vitale au bon fonctionnement de notre application: son rôle est de générer un lien hypertexte vers une autre route de notre site web, selon le nom de la route qui a été rédigé dans les annotations de la fonction désignée.
+Le second paramètre/argument est un tableau qui permet de transmettre des paramètres pour le bon fonctionnement et la transmission de valeurs supplémentaires pour les fonctions possédant des segments optionnels. Ici, la syntaxe Twig pour un tableau est légèrement différente d'une syntaxe PHP classique. En PHP, nous créons un tableau de la manière suivante:
+	['name' => 'path']
+Nous créons notre tableau de la manière suivante sur Twig:
+	{{ path('route_foo', {'name' : 'path'}) }}
+Notre fonction path() rédigée ainsi récupèrera la valeur indiquée pour la clef 'name' et remplacera le segment correspondant par ladite valeur.
+
+
+L'Inclusion de Vue
+
+L'Inclusion est une fonction à la fois inverse et complémentaire à l'héritage. Inversement à Extends, qui publie la page Twig à l'intérieur de la page héritée, Include inclut une page Twig à l'intérieur de la page faisant appel à la fonction. Ainsi, Include fonctionne comme les fonctions PHP include() ou require()
+	{% include 'layout/header.html.twig' %}
+
+Le contenu de la page header.html.twig sera automatiquement ajouté à l'emplacement de l'instruction Include.
+
+
+L'Incorporation des Elements du Dossier Public via la fonction asset()
+
+Afin de pouvoir ajouter un élément nécessaire au bon fonctionnement du site et qui doit être directement accessible via une requête client, Twig possède une fonction asset() qui est un lien direct vers le contenu du dossier 'public'.
+	{{ asset('assets/css/stylesheet.css') }}
+Rédigé ainsi, ce bloc génèrera automatiquement un lien en partant du dossier public et qui pointera vers la ressource indiquée, ici, le fichier stylesheet.css, rangé dans le dossier css, dans le dossier assets.
+Ainsi, la fonction asset de Twig est indispensable pour pouvoir afficher les ressources du dossier public tels que les images, les fichiers CSS ou encore JavaScript.
+
+========================================================================================================================================================================================================================================================================================================================================================
+
+Les différentes commandes :
 
 ================================================================================================================
 
-symfony new --full SymfonyBlog // Création d'un nouveau dossier
-
-================================================================================================================
 commandes symfony :
 
+================================================================================================================
+
+  new --full SymfonyBlog                                         Création d'un nouveau dossier du nom de SymfonyBlog
   new                                                            Create a new Symfony project
   serve                                                          Run a local web server
   server:stop                                                    Stop the local web server
@@ -193,6 +306,8 @@ Get help for a specific command with symfony.exe help COMMAND.
 ================================================================================================================
 
 commandes php bin/console
+
+================================================================================================================
 
 Usage:
   command [options] [arguments]

@@ -39,7 +39,7 @@ class Bulletin
 
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = new \DateTime("NOW");
     }
 
     public function getId(): ?int
