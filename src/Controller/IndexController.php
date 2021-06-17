@@ -44,7 +44,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/{bulletinId}", name="bulletin_display")
+     * @Route("/bulletin/{bulletinId}", name="bulletin_display")
      */
     public function bulletinDisplay(Request $request, $bulletinId = null): Response
     {
@@ -61,26 +61,22 @@ class IndexController extends AbstractController
             ["title" => "Vert", "category" => "success", "content" => "Forrest Gump est un personnage fictif, un simple d'esprit tout d'abord apparu dans le roman homonyme de Winston Groom en 1986 puis dans le film homonyme réalisé par Robert Zemeckis en 1994. Forrest est interprété par Michael Conner Humphreys enfant et par Tom Hanks en tant qu'adulte. Le personnage du livre est différent de celui du film. En 2008, il a été nommé le 20e plus grand personnage de cinéma de tous les temps par le magazine Empire1."],
         ];
 
-        $bulletins = [];
-
-        foreach ($bulletinInfos as $cle => $bulletinInfo) {
+        if (is_numeric($bulletinId) && $bulletinId > 0 && $bulletinId <= count($bulletinInfos)) {
+            $selectedInfo = $bulletinInfos[($bulletinId - 1)];
             $bulletin = new Bulletin;
-            $bulletin->setTitle($bulletinInfo["title"]);
-            $bulletin->setCategory($bulletinInfo["category"]);
-            $bulletin->setContent($bulletinInfo["content"]);
-            $bulletins[$cle] = $bulletin;
+            $bulletin->setTitle($selectedInfo["title"]);
+            $bulletin->setCategory($selectedInfo["category"]);
+            $bulletin->setContent($selectedInfo["content"]);
+
+            $bulletins = [$bulletin];
+        } else {
+            $bulletins = [];
         }
 
-        if ($bulletinId == null || !is_numeric($bulletinId) || $bulletinId > count($bulletins)) {
-            header("Location: /");
-            die();
-        }
-
-        return $this->render('index/index.html.twig', ["bulletins" => $bulletins[$bulletinId - 1]]);
+        return $this->render('index/index.html.twig', ["bulletins" => $bulletins]);
     }
 
 
-    //! Pourquoi ça fonctionne alors que la page response n'existe pas ?
     /**
      * @Route("/response/{option}", name="index_response")
      */
