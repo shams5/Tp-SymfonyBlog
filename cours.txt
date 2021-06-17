@@ -215,7 +215,6 @@ ATTENTION: Le contenu d'un bloc hérité n'affiche pas les valeurs saisies à l'
 	{{ parent() }}
 Cette fonction récupère les instruction présentes à l'intérieur du bloc du fichier parent et le recopie à l'emplacement de la fonction.
 
-14/04/21
 
 A propos de certaines fonctionnalités Twig
 
