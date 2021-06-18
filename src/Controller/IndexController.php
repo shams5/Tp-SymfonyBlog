@@ -84,6 +84,22 @@ class IndexController extends AbstractController
     }
 
     /**
+     * @Route("/delete/bulletin/{bulletinId}", name = "bulletin_delete")
+     */
+    public function bulletinDelete(Request $request, $bulletinId)
+    {
+        // Nous récupérons l'Entity Manager et le Repository qui nous intéresse (Bulletin)
+        $entityManager = $this->getDoctrine()->getManager();
+        $bulletinRepository = $entityManager->getRepository(Bulletin::class);
+
+        // Nous récupérons le Bulletin concerné via l'ID présente dans bulletinId
+        $bulletin = $bulletinRepository->find($bulletinId);
+    }
+
+
+
+
+    /**
      * @Route("/cheatsheet", name="index_cheatsheet")
      */
     public function indexCheatsheet(): Response
