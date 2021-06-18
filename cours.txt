@@ -511,7 +511,7 @@ Available commands:
 
   Modifier le fichier .env => commenter postgres,  modifier et décommenter mysql
 
-  Créer la BDD avec la commande :
+  Créer la BDD avec la commande et s'y connecter :
   php bin/console doctrine:database:create 
 
   Créer le dossier assets qui contient les dossiers img, css et js

@@ -18,7 +18,9 @@
 			<p class="h3">{{ bulletin.category }}</p>
 			<p>{{ bulletin.content }}</p>
 			<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
-			<button class="btn btn-danger">Supprimer</button>
+			<a href="{{ path('bulletin_delete', {'bulletinId':bulletin.id}) }}">
+				<button class="btn btn-danger">Supprimer</button>
+			</a>
 		</div>
 	{% endfor %}
 {% endblock %}
