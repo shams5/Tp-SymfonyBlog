@@ -94,6 +94,15 @@ class IndexController extends AbstractController
 
         // Nous récupérons le Bulletin concerné via l'ID présente dans bulletinId
         $bulletin = $bulletinRepository->find($bulletinId);
+        // Si aucun bulletin correspondant à l'ID indiqué n'est trouvé, nous revenons vers l'index
+        if (!$bulletin) {
+            return $this->redirect($this->generateUrl('index'));
+        }
+        // Si nous trouvons un bulletin, nous procédons à sa demande de suppression via l'Entity Manager
+        $entityManager->remove($bulletin);
+        $entityManager->flush();
+        //Nous retournons à l'index à présent que notre fonction a rempli son rôle
+        return $this->redirect($this->generateUrl('index'));
     }
 
 
