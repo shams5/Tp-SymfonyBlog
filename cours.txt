@@ -321,7 +321,7 @@ Nous devons installer le module de fixtures avant de pouvoir l'utiliser, via la 
 Encore une fois, afin de pouvoir conserver nos données et ajouter de nouvelles entrées aux tables de notre base de données, nous ne devons pas suivre une logique basée sur les données relationnelles mais sur la logique Orienté Objet: nous devons créer une Entity, la définir, et indiquer à Doctrine que nous souhaitons la conservre au sein de notre base de données.
 
 Les quatre étapes de la persistances des données en Symfony:
-	-> La création de la nouvelle insance de notre Entity via "new"
+	-> La création de la nouvelle instance de notre Entity via "new"
 	-> Nous définissons notre instance d'Entity via le constructeur/setters
 	-> Nous indiquons à Doctrine que nous souhaitons que cette instance soit conservée (persiste dans son existence) via la fonction persist()
 	-> Nous indiquons à Doctrine d'appliquer toutes les opérations que nous avons requises via la fonction flush()
@@ -331,6 +331,47 @@ Dans le cadre de nos fixtures, la fonction load(), qui sera automatiquement appe
 
 Cette commande charge la fonction load() de chaque classe de Fixtures, ce qui appliquera les différentes requêtes de persistance de données que nous aurons indiqué via le code de ces classes. A chaque chargement de fixtures, notre base de données sera purgée, mais étant donné que ces valeurs indiquées ne possèdent qu'un but de remplissage et que les classes Fixtures peuvent être laissées sans conséquence, nos fausses données seront à nouveau ajoutées autoamtiquement sauf intervention de notre part.
 Etant donné que lors du lancement en production de notre site, les fausses données devront être supprimées dans un souci de cohérence, la purge automatique de notre base de données n'est pas un problème.
+
+========================================================================================================================================================================================================================================================================================================================================================
+
+La récupération des données de notre base de données, via Doctrine
+
+A présent que notre base de données possède des entrées susceptibles d'être récupérées et utilisées par notre application, nous devons être capables de lancer des requêtes à notre base de données en ce sens. En PHP classique, nous utiliserions des requêtes SQL transmises via le module PDO. Dans le cadre de Symfony, nous devrons utiliser Doctrine.
+
+Doctrine possède des fonctions prédéfinies pour récupérer des informations à partir d'une table. Etant donné que nous approchons nos données persistentes du point de vue des Entity et non des tables, nous devons transmettre à Doctrine une requête de récupération des données d'une Entity désignée. Cette opération est effectuée grâce à une classe spécialisée en ce sens, qui est l'Entity Manager.
+
+L'Entity Manager est une classe qui nous permet de gérer le fonctionnement des Entity. Grâce à l'Entity Manager, nous pouvons atteindre la classe Repository, qui sera la classe qui nous permettra d'effectuer des requêtes de récupération des données. Le Repository est une classe spéciale contenant plusieurs fonctions détaillant divers critères de récupération de données persistantes (c'est-à-dire stockées dans notre Model, dont fait partie la base de données).
+
+Afin de récupérer la classe Repository, nous devons donc d'abord récupérer l'Entity Manager (Gestionnaire d'Entité), et grâce à lui faire appel au Repository de l'Entity qui nous intéresse:
+	$entityManager = $this->getDoctrine()->getManager();
+	$articleRepository = $entityManager->getRepository(\App\Entity\Article::class)
+
+Ainsi, nous récupérons deux variables, la première contenant l'Entity Manager, qui nous servira à récupérer les Repository et à effectuer les requêtes de persistance de données à Doctrine via les fonctions persist() et flush(), et l'autre variable contient le Repository, qui possède les fonctions nécessaires pour la récupération d'Entity à partir de notre base de données.
+
+Le Repository contient déjà des fonctions prédéfinies nous permettant de récupérer certaines entrées de notre table SQL. La méthode findAll() rendra toutes les entrées de notre table sans exception. Le résultat sera stocké soit dans le cas d'une seul résultat, directement sous la forme d'une instance d'Entity, ou, comme par exemple dans le cas d'un findAll(), sous la forme d'un ArrayCollection, qui est un objet exerçant le rôle d'un tableau contenant plusieurs instances d'une Entity.
+Il sera possible d'utiliser des boucles pour itérer à l'intérieur de ce tableau et de traiter les différentes instances d'Entity qui y sont stockées, que ce soit à l'intérieur de notre Controller ou même dans notre template, via les fonctions Twig.
+
+Doctrine et le Repository possèdent différentes fonctions prédéfinies pour récupérer des données de notre table selon certains critères. La spécialité du SQL étant la récupération rapide de données, il est largement préférable d'utiliser les méthodes du Repository plutôt que d'employer un findAll() et de traiter le résultat soi-même avec un code PHP bien plus lent à l'exécution.
+Il est possible d'utiliser le préfixe findBy() pour générer une fonction de recherche d'entrées de notre table selon certains critères. Par exemple, en écrivant findByCategory("general"), Doctrine comprend via le préfixe findBy que nous recherchons un tableau d'entrées dont la valeur indiquée par le paramètre correspond à une valeur équivalente indiquée par la colonne dont le nom est identique au mot ajouté dans notre fonction.
+Ainsi, findByCategory("general") est compris par Doctrine comme une requête de génération de requête SQL de récupération de toutes les entrées de la table où la valeur de la colonne "category" est donc "general".
+
+Le Repository est composé de fonctions écrites dans un langage intermédiaire nommé le DQL (Doctrine Query Language). Ce langage est une nécessité pour la gestion des Entity qui ne sont pas compatibles avec le SQL mais qui ont de part de leur fonction besoin d'un langage apparenté pour être efficacement traitées.
+Le DQL est donc un langage intermédiaire utilisé par Doctrine pour traiter les Entity et qui sert donc de jonction entre le PHP/Symfony et le SQL. Une fois la requête DQL valide acceptée par Doctrine, elle est transmise à la base de donnée après avoir été traduite en requête SQL.
+Nous pouvons écrire nos propres requêtes DQL dans le Repository de l'Entity qui nous intéresse. Lors de la création d'une Entity, un Repository associé est automatiquement généré et à l'intérieur se trouvent deux exemples-type de requête DQL que nous pouvons utiliser pour rédiger les nôtres. En plus de tout cela, le reste des commandes existantes et les informations sur comment les utiliser se trouvent sur la documentation officielle de Doctrine, à l'adresse suivante:
+
+	https://www.doctrine-project.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html
+
+
+La suppression d'Entity
+
+Si la lecture d'instances Entity s'effectue avec le Repository, la création de nouvelles entrées de notre table s'effectue avec l'Entity Manager et ses fonctions persist() et flush(). La modification d'Entity s'effectue donc en toute logique par une première récupération de l'Entity désirée via le Repository, sa modification par PHP et son renvoi sous une nouvelle valeur en tant qu'entrée de table de notre base de données, via la fonction persist().
+Cependant, la suppression d'Entity emploie une toute nouvelle fonction, aussi simple qu'il est possible. En effet, si l'ajout ou la modification d'une Entity s'effectue avec la fonction persist() accompagnée d'une exécution de la requête via flush(), la suppression d'une Entity existante s'effectue via la fonction remove(), laquelle est de même confirmée par une fonction flush().
+
+	$entityManager = $this->getDoctrine()->getManager();
+	$exempleRepository = $entityManager->getRepository(Exemple::class);
+	$exemple = $exempleRepository->findOneByName('exemple');
+	$entityManager->remove($exemple);
+	$entityManager->flush();
 
 ========================================================================================================================================================================================================================================================================================================================================================
 
