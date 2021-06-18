@@ -7,16 +7,17 @@
 	<h1 class="mt-5">
 		<a href="{{ path('index') }}">Liste des Bulletins</a>
 	</h1>
-	{% set i = 1 %}
 	{% for bulletin in bulletins %}
-		<div class="alert alert-{{ bulletin.category }}">
+		<pre>
+		{{ dump(bulletin) }}
+	</pre>
+		<div class="alert alert-info">
 			<h3 class="display-5">
-				<a href="{{ path('bulletin_display', {"bulletinId" :i} )}}">{{ bulletin.title }}</a>
+				<a href="{{ path('bulletin_display', {'bulletinId':bulletin.Id})}}">{{ bulletin.title }}</a>
 			</h3>
 			<p class="h3">{{ bulletin.category }}</p>
 			<p>{{ bulletin.content }}</p>
 			<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
 		</div>
-		{% set i = i + 1 %}
 	{% endfor %}
 {% endblock %}
