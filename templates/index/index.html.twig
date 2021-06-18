@@ -18,6 +18,7 @@
 			<p class="h3">{{ bulletin.category }}</p>
 			<p>{{ bulletin.content }}</p>
 			<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
+			<button class="btn btn-danger">Supprimer</button>
 		</div>
 	{% endfor %}
 {% endblock %}
