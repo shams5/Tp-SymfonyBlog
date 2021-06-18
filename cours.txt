@@ -268,33 +268,6 @@ Ainsi, la fonction asset de Twig est indispensable pour pouvoir afficher les res
 
 ========================================================================================================================================================================================================================================================================================================================================================
 
-Migration :
-
-les commandes effectuées pour rentrer les attributs d'une classe dans la base de données sont les deux suivantes :
-
-php bin/console make:migration
--> Invite Doctrine à comparer l'état de nos Entity avec la structure de notre base de données et à générer à l'intérieur d'un fichier php les différentes commandes SQL nécessaires pour synchroniser la seconde avec les premières
-
-php bin/console doctrine:migrations:migrate (puis répondre yes)
--> Applique le contenu des différents fichiers php de migration générés par Doctrine.
-
-========================================================================================================================================================================================================================================================================================================================================================
-
-Installation de la bibliothèque orm-fixtures grâce à l'outil composer:
-
-composer require --dev orm-fixtures
---dev signifie que cette bibliothèque n'est active que Lorsque notre application est en mode développeur
-(On peut trouver d'autres bibliothèques sur https://flex.symfony.com/)
-
-========================================================================================================================================================================================================================================================================================================================================================
-
-Instanciation de la classe BulletinFixtures et appel de load()
-
-
-php bin/console doctrine:fixtures:load
-
-========================================================================================================================================================================================================================================================================================================================================================
-
 Les différentes commandes :
 
 ================================================================================================================
@@ -303,7 +276,7 @@ commandes symfony :
 
 ================================================================================================================
 
-  new --full SymfonyBlog                                         Création d'un nouveau dossier du nom de SymfonyBlog
+  new --full <SymfonyBlog>                                         Création d'un nouveau dossier du nom de SymfonyBlog
   new                                                            Create a new Symfony project
   serve                                                          Run a local web server
   server:stop                                                    Stop the local web server
@@ -456,3 +429,66 @@ Available commands:
   translation:pull                           Pull translations from a given provider.
   translation:push                           Push translations to a given provider.
   translation:update                         Update the translation file
+
+
+  ========================================================================================================================================================================================================================================================================================================================================================
+
+  En résumé :
+
+  Ouvrir Powershell
+
+  Créer le projet avec la commande 
+  Symfony new --full <nomDuProjet>
+
+  Se replacer dans le projet avec la commande
+  cd <nomDuDossier>
+
+  Modifier le fichier .env => commenter postgres,  modifier et décommenter mysql
+
+  Créer la BDD avec la commande :
+  php bin/console doctrine:database:create 
+
+  Créer le dossier assets qui contient les dossiers img, css et js
+
+  Via bootstrap importer les fichiers css et js
+
+  Créer un nouveau controller avec la commande 
+  php bin/console make:controller <nom>
+
+  Modifier la méthode index (@Route)
+
+  EXO1
+
+  EXO2
+
+  Créer l' entité bulletin avec la commande 
+  php bin/console make:entity
+  rentrer le nom de cette entité et ses différents attributs et les caractéristiques de ceux-ci
+
+  EXO3
+
+Migration (synchronisation avec la base de donnée):
+
+les commandes effectuées pour connecter les attributs d'une classe avec la base de données sont les deux suivantes :
+
+php bin/console make:migration
+
+-> Invite Doctrine à comparer l'état de nos Entity avec la structure de notre base de données et à générer à l'intérieur d'un fichier php les différentes commandes SQL nécessaires pour synchroniser la seconde avec les premières
+
+php bin/console doctrine:migrations:migrate (puis répondre yes)
+
+-> Applique le contenu des différents fichiers php de migration générés par Doctrine.  
+
+Installation de la bibliothèque orm-fixtures grâce à l'outil composer:
+
+composer require --dev orm-fixtures
+
+--dev signifie que cette bibliothèque n'est active que Lorsque notre application est en mode développeur
+(On peut trouver d'autres bibliothèques sur https://flex.symfony.com/)
+
+
+Instanciation de la classe BulletinFixtures et appel de load()
+
+php bin/console doctrine:fixtures:load
+-> permet d'intéragir avec la bdd
+
