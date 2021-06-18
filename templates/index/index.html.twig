@@ -8,10 +8,8 @@
 		<a href="{{ path('index') }}">Liste des Bulletins</a>
 	</h1>
 	{% for bulletin in bulletins %}
-		<pre>
-		{{ dump(bulletin) }}
-	</pre>
-		<div class="alert alert-{{ bulletin.getStatus() }}">
+
+		<div class="alert alert-{{ bulletin.status }}">
 			<h3 class="display-5">
 				<a href="{{ path('bulletin_display', {'bulletinId':bulletin.Id})}}">{{ bulletin.title }}</a>
 			</h3>

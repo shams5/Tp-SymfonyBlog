@@ -48,13 +48,10 @@ class Bulletin
         switch ($this->category) {
             case "General":
                 return "success";
-                break;
             case "Urgent":
                 return "danger";
-                break;
             case "Divers":
                 return "info";
-                break;
             default:
                 return "secondary";
         }
