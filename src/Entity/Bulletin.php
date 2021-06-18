@@ -42,6 +42,24 @@ class Bulletin
         $this->creationDate = new \DateTime("NOW");
     }
 
+    public function getStatus()
+    {
+        // Retourne le code bootstrap déterminant l'affichage de la couleur de notre <div> alert SELON la catégorie du bulletin en question (Vert pour 'General',  Rouge pour 'Urgent', Bleu ciel pour 'Divers' et Gris pour le reste)
+        switch ($this->category) {
+            case "General":
+                return "success";
+                break;
+            case "Urgent":
+                return "danger";
+                break;
+            case "Divers":
+                return "info";
+                break;
+            default:
+                return "secondary";
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;
