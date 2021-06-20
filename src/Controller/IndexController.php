@@ -20,10 +20,10 @@ class IndexController extends AbstractController
         // Nous allons nous connecter à notre base de données via l'Entity Manager
         // Nous récupérons ensuite le Repository de Bulletin lequel nous permet d'effectuer des recherches
         $entityManager = $this->getDoctrine()->getManager();
-        $bulletinRepository = $entityManager->getRepository(Bulletin::class);
+        $bulletinRepository = $entityManager->getRepository(Bulletin::class); //! class est un attribut statique ?
 
         // Nous allons utiliser la méthode prédéfinie findAll() de notre Repository
-        $bulletins = $bulletinRepository->findAll();
+        $bulletins = $bulletinRepository->findAll(); //* Retourne un tableau d'objet
 
         return $this->render('index/index.html.twig', [
             'bulletins' => $bulletins,
@@ -41,7 +41,7 @@ class IndexController extends AbstractController
         $bulletinRepository = $entityManager->getRepository(Bulletin::class);
 
         // La fonction find() du Repository permet de récupérer un seul objet selon son ID
-        $bulletin = $bulletinRepository->find($bulletinId);
+        $bulletin = $bulletinRepository->find($bulletinId); //* Retourne un objet
 
         // Si $bulletin = null, on est redirigé vers l'index
         if (!$bulletin) {
@@ -50,12 +50,45 @@ class IndexController extends AbstractController
             return $this->redirect($this->generateUrl('index'));
         }
 
-        $bulletins = [$bulletin];
+        $bulletins = [$bulletin]; //* Il faut retourner un tableau d'objet, hors $bulletin est un objet
 
         //Je renvoie mon tableau $bulletins à une entrée à ma page twig index.html.twig
         return $this->render('index/index.html.twig', [
             'bulletins' => $bulletins,
         ]);
+    }
+
+
+
+    /**
+     * @Route("/delete/bulletin/{bulletinId}", name = "bulletin_delete")
+     */
+    public function bulletinDelete(Request $request, $bulletinId)
+    {
+        // Nous récupérons l'Entity Manager et le Repository qui nous intéresse (Bulletin)
+        $entityManager = $this->getDoctrine()->getManager();
+        $bulletinRepository = $entityManager->getRepository(Bulletin::class);
+
+        // Nous récupérons le Bulletin concerné via l'ID présente dans bulletinId
+        $bulletin = $bulletinRepository->find($bulletinId); //* find() équivaut à findOneById()
+        // Si aucun bulletin correspondant à l'ID indiqué n'est trouvé, nous revenons vers l'index
+        if (!$bulletin) {
+            return $this->redirect($this->generateUrl('index'));
+        }
+        // Si nous trouvons un bulletin, nous procédons à sa demande de suppression via l'Entity Manager
+        $entityManager->remove($bulletin);
+        $entityManager->flush();
+        //Nous retournons à l'index à présent que notre fonction a rempli son rôle
+        return $this->redirect($this->generateUrl('index'));
+    }
+
+
+    /**
+     * @Route("/cheatsheet", name="index_cheatsheet")
+     */
+    public function indexCheatsheet(): Response
+    {
+        return $this->render('index/cheatsheet.html.twig');
     }
 
 
@@ -81,38 +114,5 @@ class IndexController extends AbstractController
         }
 
         return new Response("<div style='width:200px; height:300px; background-color : " . $figure . ";'></div>");
-    }
-
-    /**
-     * @Route("/delete/bulletin/{bulletinId}", name = "bulletin_delete")
-     */
-    public function bulletinDelete(Request $request, $bulletinId)
-    {
-        // Nous récupérons l'Entity Manager et le Repository qui nous intéresse (Bulletin)
-        $entityManager = $this->getDoctrine()->getManager();
-        $bulletinRepository = $entityManager->getRepository(Bulletin::class);
-
-        // Nous récupérons le Bulletin concerné via l'ID présente dans bulletinId
-        $bulletin = $bulletinRepository->find($bulletinId);
-        // Si aucun bulletin correspondant à l'ID indiqué n'est trouvé, nous revenons vers l'index
-        if (!$bulletin) {
-            return $this->redirect($this->generateUrl('index'));
-        }
-        // Si nous trouvons un bulletin, nous procédons à sa demande de suppression via l'Entity Manager
-        $entityManager->remove($bulletin);
-        $entityManager->flush();
-        //Nous retournons à l'index à présent que notre fonction a rempli son rôle
-        return $this->redirect($this->generateUrl('index'));
-    }
-
-
-
-
-    /**
-     * @Route("/cheatsheet", name="index_cheatsheet")
-     */
-    public function indexCheatsheet(): Response
-    {
-        return $this->render('index/cheatsheet.html.twig');
     }
 }

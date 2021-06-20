@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class BulletinFixtures extends Fixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager) //* La persistence de donnée en 4 étapes
     {
         // $product = new Product();
         // $manager->persist($product);
@@ -35,20 +35,24 @@ class BulletinFixtures extends Fixture
         ];
 
         foreach ($bulletinInfos as $bulletinInfo) {
+
+            //* 1 -> Instanciation de l'entity (future entrée de la base de donnée)
             $bulletin = new Bulletin;
+
+            //* 2 -> Définition de l'objet et de ses attributs via les setters et le constructeur ($this->creationDate = new \DateTime("NOW");)
             $bulletin->setTitle($bulletinInfo['title']);
             $bulletin->setCategory($bulletinInfo['category']);
             $bulletin->setContent($bulletinInfo['content']);
-            //* Création de l'objet et de ses attributs
+
+            //* 3 -> Sauvegarde de l'objet
             $manager->persist($bulletin);
-            //* Permet de conserver l'objet au lieu qu'il soit supprimé
-            //* ObjectManager permet d'émettre une requête/demande de persistence afin d'envoyer les données dans la base de donnée
+            //? Permet de conserver l'objet au lieu qu'il soit supprimé
+            //? ObjectManager permet d'émettre une requête/demande de persistence afin d'envoyer les données dans la base de donnée
         }
 
-
+        //* 4 -> Exécution la requête
         $manager->flush();
-        //* Permet d'éxécuter la requête
-        //* Il est tout à fait possible de faire plusieurs requêtes avant le flush => nous serons amenés à utiliser les boucles 
+        //? Il est tout à fait possible de faire plusieurs requêtes avant le flush => nous serons amenés à utiliser les boucles 
     }
 
     public function makeContent()

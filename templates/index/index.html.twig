@@ -8,15 +8,18 @@
 		<a href="{{ path('index') }}">Liste des Bulletins</a>
 	</h1>
 	{% for bulletin in bulletins %}
-
-		<div class="alert alert-{{ bulletin.status }}">
+		<div
+			class="alert alert-{{ bulletin.status }}">
+			{# équivaut à écrire  bulletin.getStatus #}
 			<h3 class="display-5">
 				<a href="{{ path('bulletin_display', {'bulletinId':bulletin.Id})}}">{{ bulletin.title }}</a>
 			</h3>
 			<p class="h3">{{ bulletin.category }}</p>
 			<p>{{ bulletin.content }}</p>
 			<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
-			<a href="{{ path('bulletin_delete', {'bulletinId':bulletin.id}) }}">
+			<a
+				href="{{ path('bulletin_delete', {'bulletinId':bulletin.id}) }}">
+				{# On suit la route bulletin_delete qui mène à la fonction bulletinDelete de la classe IndexController avec en paramètre l'id du bulletin #}
 				<button class="btn btn-danger">Supprimer</button>
 			</a>
 		</div>

@@ -63,7 +63,7 @@ La structure théorique du framework Symfony
 
 Lorsque nous développons une application en utilisant notre framework, nous allons utiliser une architecture particulière, qui est nommée MVC, pour Model-View-Controller (Modèle, Vue, Controller). Les trois composants de cet acronyme sont trois Patrons de Conception (Design Patterns), qui sont associés pour fournir la logique de base de notre application.
 
-Qu'est-ce qu'un Design Pattern?
+Qu'est-ce qu'un Design Pattern ?
 Un Design Pattern/Patron de Conception est un arrangement caractéristique de modules, reconnu comme bonne pratique en réponse à un problème de conception de logiciel. Le Design Pattern décrit une solution standard, utilisable de la conception de différents logiciels. C'est un formalisme conçu pour répondre à des problèmes particuliers avec une méthode prédéfinie.
 
 
@@ -185,7 +185,7 @@ $this->render est une fonction particulière qui rendra une erreur si notre inst
 Twig est avant tout un langage de template. C'est un langage visant à alléger le code de notre page web en remplaçant tout le PHP par une série de balises à l'apparence plus légère. Il est possible d'installer Symfony sans utiliser Twig, et il est également possible d'utiliser Twig sur un projet PHP qui n'emploie pas Symfony. Cependant, Twig est optimisé pour Symfony et, dans sa configuration de base, Symfony installe Twig par défaut.
 
 Encore une fois, la principale qualité (et l'intérêt) de Twig réside dans son hyper-simplicité. Twig est un langage qui se greffe au HTML. Chacune des instructions du langage de template sera effectué selon trois types de balise:
-	{{ *** }} -> Les doubles accolades sont utilisées pour afficher le contenu d'une variable ou le résultat d'une expression
+	{{ *** }} -> Les doubles accolades sont utilisées pour afficher le contenu d'une variable ou le résultat d'une expression (équivaut à <?= ?> )
 	{% *** %} -> L'accolade-pourcentage est utilisée dans le cadre des structures de contrôle (if, foreach, include, ou encore déclaration d'héritage)
 	{# *** #} -> L'accolade-dièse sert à écrire des commentaires. Contrairement aux commentaires HTML, ces commentaires Twig ne seront pas visibles depuis le code-source de la page.
 	<!--
@@ -285,22 +285,27 @@ Cependant, nous n'allons pas utiliser de SQL classique avec Symfony. Symfony emp
 Les ORM, comme leur nom l'indique, sont des applications qui servent d'intermédiaire entre les structures de base de données relationnelles et les structures orienté objet. Ici, Doctrine fera en sorte que nous n'ayons pas à écrire nous-même notre code SQL et à réfléchir à traduire le fonctionnement classique de Symfony en une structure relationnelle classique. Doctrine interprétera le code de notre application et génèrera une série d'instructions SQL adaptées pour le traduire de manière efficace. Ce processus étant automatisé, nous n'avons à nous en soucier. Ce qui nous intéresse est l'utilisation efficace de Doctrine et l'établissement correcte d'une structure Model selon les règles de Symfony, via les Entités (Entity).
 
 La première étape dans la configuration de Doctrine, si la bibliothèque est déjà installée (elle l'est par défaut dans l'installation de base de Symfony), est la modification du fichier .env à la racine afin d'incorporer notre type de SGBDD, notre adresse et port de connexion, identifiant, et mot de passe. Une fois que cette étape est conclue, nous créons notre nouvelle base de données compatible Doctrine avec la commande suivante:
+
 	php bin/console doctrine:database:create
 
 Si tout se passe sans erreur, nous avons donc ici notre première base de données, à laquelle Doctrine peut accéder et interagir à loisir. Nous pouvons donc commencer à nous intéresser à l'élément fondamental de l'aspect Model de Symfony et Doctrine, qui est l'Entity.
 
-Une Entity est une classe PHP au sein de Symfony qui définit une Entité possédant plusieurs caractéristiques (à travers des attributs) et qui sera une unité de base dans la gestion des Models de notre application. En pratique, une classe Entity sera convertie en table par Doctrine, et chaque élément conçu à partir de cette Entity sera une entrée de cette table. En d'autres termes, une Entity est une classe PHP convertie en table par Doctrine, tandis que ses instances de classe (donc les objets conçus à partir de cette classe Entity et que nous conserver) seront converties en entrées de cette nouvelle table SQL.
+Une Entity est une classe PHP au sein de Symfony qui définit une Entité possédant plusieurs caractéristiques (à travers des attributs) et qui sera une unité de base dans la gestion des Models de notre application. En pratique, une classe Entity sera convertie en table par Doctrine, et chaque élément conçu à partir de cette Entity sera une entrée de cette table. En d'autres termes, une Entity est une classe PHP convertie en table par Doctrine, tandis que ses instances de classe (donc les objets conçus à partir de cette classe Entity et que nous conservons) seront converties en entrées de cette nouvelle table SQL.
 
 Les Entities peuvent être générées à partir d'une commande via notre terminal. Cette méthode est recommandée afin de ne pas provoquer d'erreurs de syntaxe ou d'oubli:
+
 	php bin/console make:entity
+
 Plusieurs questions seront alors posées via le terminal afin de pouvoir définir de manière complète notre Entity, avant de la générer automatiquement, par la création de deux classes PHP, une classe Entity et une classe Repository.
 
 Le maker ne fait que créer les classes Entity pour notre application. Il ne se charge pas de les transmettre à notre base de données. Pour cela, il faudra demander à Doctrine d'analyser nos classes et de générer une série de commandes SQL pour les traduire en tables relationnelles classiques. Pour cela, nous devons utiliser une procédure que nous appelons la migration.
 
 Comme son nom l'indique, la migration est la transmission de notre classe vers la base de données: il s'agit d'un déplacement d'un concept (Orienté Objet) à un autre (Données Relationnelles). La classe Migration est une classe PHP ayant pour fonction de gérer ce processus. Elle est automatiquement préparée par Doctrine via la commande suivante:
-	php bin/console make:migration
+	
+  php bin/console make:migration
 
 Créer la classe ne suffit cependant pas à appliquer son contenu. Il faudra ensuite signifier à Doctrine d'appliquer les instructions générées par la classe via une seconde commande:
+
 	php bin/console doctrine:migrations:migrate
 
 Le fichier migration généré obtient un numéro de version basé sur l'heure de sa création. Il possède trois fonctions, une description, up(), et down(). Le but des fonctions up() et down() est de faire exécuter une série d'instructions SQL par Doctrine. La fonction up() permet d'effectuer la migration du composant Model de notre application Symfony vers la base de données, tandis que les instructions de down() permettent d'annuler cette modification.
@@ -313,20 +318,24 @@ Ainsi, si nous souhaitons ajouter des informations à notre base de données, no
 
 Dans le cas d'une application Symfony dont le développement vient de commencer, les outils mis en place peuvent être limités pour le développeur: s'il désire tester ses bases de données sans avoir conçu de fonctions ou de formulaires permettant la mise en ligne rapide d'Entities, il peut cependant employer un autre moyen qui lui permettra de remplir sa base de données avec des informations temporaires. Il s'agit des fixtures.
 
+========================================================================================================================================================================================================================================================================================================================================================
+
 Les fixtures sont des entrées temporaires visant à tester le fonctionnement de notre base de données. Ces "fausses informations", qui n'ont pas été créées pour être conservées mais qui ont pour but de tester les capacités d'affichage et de gestion des informations par notre application, rempliront rapidement la base de données de notre application en période de développement.
 
 Nous devons installer le module de fixtures avant de pouvoir l'utiliser, via la commande suivante:
+
 	composer require --dev orm-fixtures
 
 Encore une fois, afin de pouvoir conserver nos données et ajouter de nouvelles entrées aux tables de notre base de données, nous ne devons pas suivre une logique basée sur les données relationnelles mais sur la logique Orienté Objet: nous devons créer une Entity, la définir, et indiquer à Doctrine que nous souhaitons la conservre au sein de notre base de données.
 
-Les quatre étapes de la persistances des données en Symfony:
+Les quatre étapes de la persistance des données en Symfony (fonction load()):
 	-> La création de la nouvelle instance de notre Entity via "new"
 	-> Nous définissons notre instance d'Entity via le constructeur/setters
 	-> Nous indiquons à Doctrine que nous souhaitons que cette instance soit conservée (persiste dans son existence) via la fonction persist()
 	-> Nous indiquons à Doctrine d'appliquer toutes les opérations que nous avons requises via la fonction flush()
 
 Dans le cadre de nos fixtures, la fonction load(), qui sera automatiquement appelée pour chaque classe de fixture présente, possède dans sa structure trois de ces quatre éléments. Le second, la définition de notre instance par ses setters (ou via le constructeur), est une procédure que nous allons devoir définir par nous-mêmes. Une fois plusieurs exemples de fausses données entrées, nous allons utiliser la commande:
+
 	php bin/console doctrine:fixtures:load
 
 Cette commande charge la fonction load() de chaque classe de Fixtures, ce qui appliquera les différentes requêtes de persistance de données que nous aurons indiqué via le code de ces classes. A chaque chargement de fixtures, notre base de données sera purgée, mais étant donné que ces valeurs indiquées ne possèdent qu'un but de remplissage et que les classes Fixtures peuvent être laissées sans conséquence, nos fausses données seront à nouveau ajoutées autoamtiquement sauf intervention de notre part.
@@ -343,16 +352,25 @@ Doctrine possède des fonctions prédéfinies pour récupérer des informations 
 L'Entity Manager est une classe qui nous permet de gérer le fonctionnement des Entity. Grâce à l'Entity Manager, nous pouvons atteindre la classe Repository, qui sera la classe qui nous permettra d'effectuer des requêtes de récupération des données. Le Repository est une classe spéciale contenant plusieurs fonctions détaillant divers critères de récupération de données persistantes (c'est-à-dire stockées dans notre Model, dont fait partie la base de données).
 
 Afin de récupérer la classe Repository, nous devons donc d'abord récupérer l'Entity Manager (Gestionnaire d'Entité), et grâce à lui faire appel au Repository de l'Entity qui nous intéresse:
+
 	$entityManager = $this->getDoctrine()->getManager();
 	$articleRepository = $entityManager->getRepository(\App\Entity\Article::class)
 
 Ainsi, nous récupérons deux variables, la première contenant l'Entity Manager, qui nous servira à récupérer les Repository et à effectuer les requêtes de persistance de données à Doctrine via les fonctions persist() et flush(), et l'autre variable contient le Repository, qui possède les fonctions nécessaires pour la récupération d'Entity à partir de notre base de données.
 
-Le Repository contient déjà des fonctions prédéfinies nous permettant de récupérer certaines entrées de notre table SQL. La méthode findAll() rendra toutes les entrées de notre table sans exception. Le résultat sera stocké soit dans le cas d'une seul résultat, directement sous la forme d'une instance d'Entity, ou, comme par exemple dans le cas d'un findAll(), sous la forme d'un ArrayCollection, qui est un objet exerçant le rôle d'un tableau contenant plusieurs instances d'une Entity.
+----------
+
+Le Repository contient déjà des fonctions prédéfinies nous permettant de récupérer certaines entrées de notre table SQL : 
+
+=> La méthode findAll() rendra toutes les entrées de notre table sans exception. Le résultat sera stocké soit dans le cas d'une seul résultat, directement sous la forme d'une instance d'Entity, ou, comme par exemple dans le cas d'un findAll(), sous la forme d'un ArrayCollection, qui est un objet exerçant le rôle d'un tableau contenant plusieurs instances d'une Entity.
+
+=> La fonction find(<entity_name>Id) récupére un seul objet selon son ID
+
 Il sera possible d'utiliser des boucles pour itérer à l'intérieur de ce tableau et de traiter les différentes instances d'Entity qui y sont stockées, que ce soit à l'intérieur de notre Controller ou même dans notre template, via les fonctions Twig.
 
 Doctrine et le Repository possèdent différentes fonctions prédéfinies pour récupérer des données de notre table selon certains critères. La spécialité du SQL étant la récupération rapide de données, il est largement préférable d'utiliser les méthodes du Repository plutôt que d'employer un findAll() et de traiter le résultat soi-même avec un code PHP bien plus lent à l'exécution.
-Il est possible d'utiliser le préfixe findBy() pour générer une fonction de recherche d'entrées de notre table selon certains critères. Par exemple, en écrivant findByCategory("general"), Doctrine comprend via le préfixe findBy que nous recherchons un tableau d'entrées dont la valeur indiquée par le paramètre correspond à une valeur équivalente indiquée par la colonne dont le nom est identique au mot ajouté dans notre fonction.
+
+=> Il est possible d'utiliser le préfixe findBy() pour générer une fonction de recherche d'entrées de notre table selon certains critères. Par exemple, en écrivant findByCategory("general"), Doctrine comprend via le préfixe findBy que nous recherchons un tableau d'entrées dont la valeur indiquée par le paramètre correspond à une valeur équivalente indiquée par la colonne dont le nom est identique au mot ajouté dans notre fonction.
 Ainsi, findByCategory("general") est compris par Doctrine comme une requête de génération de requête SQL de récupération de toutes les entrées de la table où la valeur de la colonne "category" est donc "general".
 
 Le Repository est composé de fonctions écrites dans un langage intermédiaire nommé le DQL (Doctrine Query Language). Ce langage est une nécessité pour la gestion des Entity qui ne sont pas compatibles avec le SQL mais qui ont de part de leur fonction besoin d'un langage apparenté pour être efficacement traitées.
@@ -540,7 +558,6 @@ Available commands:
 
   ========================================================================================================================================================================================================================================================================================================================================================
 
-  En résumé :
 
   Ouvrir Powershell
 
@@ -555,26 +572,34 @@ Available commands:
   Créer la BDD avec la commande et s'y connecter :
   php bin/console doctrine:database:create 
 
-  Créer le dossier assets qui contient les dossiers img, css et js
+  Créer le dossier public/assets qui contient les dossiers img, css et js
 
   Via bootstrap importer les fichiers css et js
+
+  Importer via la fonction asset de twig le script et le style
 
   Créer un nouveau controller avec la commande 
   php bin/console make:controller <nom>
 
-  Modifier la méthode index (@Route)
+  Modifier la route de la méthode index (@Route)
 
-  EXO1
+  EXO1 => https://github.com/MadickeTHIANE/Tp-SymfonyBlog/commit/d5d92e9b10bfe45dac7b1aa01b53a435b5acccf0
+
+  Création du dossier layout/header.html.twig et layout/footer.html.twig
 
   EXO2
 
-  Créer l' entité bulletin avec la commande 
+  Modification de la navbar (lien vers l'accueil et vers la cheatsheet)
+
+  Créer l'entité bulletin avec la commande 
   php bin/console make:entity
   rentrer le nom de cette entité et ses différents attributs et les caractéristiques de ceux-ci
 
+  Instancier le bulletin et l'afficher via l'indexController
+
   EXO3
 
-Migration (synchronisation avec la base de donnée):
+Migration (synchronisation avec la base de donnée) => création de la table bulletin dans la base de donnée:
 
 les commandes effectuées pour connecter les attributs d'une classe avec la base de données sont les deux suivantes :
 
@@ -594,8 +619,13 @@ composer require --dev orm-fixtures
 (On peut trouver d'autres bibliothèques sur https://flex.symfony.com/)
 
 
-Instanciation de la classe BulletinFixtures et appel de load()
+Instanciation de la classe BulletinFixtures et appel de load() => création de nouvelles entrées qui écrasent les précédentes
 
 php bin/console doctrine:fixtures:load
 -> permet d'intéragir avec la bdd
+
+Récupération de l'Entity Manager et du Repository afin de modifier / supprimer des entrées
+
+	$entityManager = $this->getDoctrine()->getManager();
+	$<entity_name>Repository = $entityManager->getRepository(\App\Entity\<entity_name>::class)
 

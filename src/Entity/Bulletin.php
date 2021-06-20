@@ -39,7 +39,7 @@ class Bulletin
 
     public function __construct()
     {
-        $this->creationDate = new \DateTime("NOW");
+        $this->creationDate = new \DateTime("now");
     }
 
     public function getStatus()
