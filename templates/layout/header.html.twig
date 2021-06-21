@@ -12,10 +12,21 @@
 						<a class="nav-link active" aria-current="page" href="{{ path('index_cheatsheet') }}">Cheatsheet</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Link</a>
+						<a class="nav-link active" href="#">Tags</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+					<li class="nav-item dropdown">
+						<a class="nav-link active dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">Catégories</a>
+						<ul class="dropdown-menu" aria-labelledby="category">
+							<li>
+								<a class="dropdown-item" href="{{ path('index_category', {'categoryName' : 'general'}) }}">General</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="{{ path('index_category', {'categoryName' : 'urgent'}) }}">Urgent</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="{{ path('index_category', {'categoryName' : 'divers'}) }}">Divers</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 				<form class="d-flex">
