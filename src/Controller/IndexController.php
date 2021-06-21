@@ -109,7 +109,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/create/bulletin", name="bulletin_create")
      */
-    public function createBulletin()
+    public function createBulletin(Request $request)
     {
         // Nous récupérons l'Entity Manager afin de préparer l'envoi du Bulletin à créer
         $entityManager = $this->getDoctrine()->getManager();
@@ -118,7 +118,15 @@ class IndexController extends AbstractController
         $bulletin = new Bulletin;
         $bulletinForm = $this->createForm(BulletinType::class, $bulletin);
 
+        // Nous récupérons les informations de la requête utilisateur pour notre formulaire
+        $bulletinForm->handleRequest($request);
+
         // Une fois le Bulletin validé, nous procédons à sa mise en ligne dans la BDD
+        if ($request->isMethod('post') && $bulletinForm->isValid()) {
+            $entityManager->persist($bulletin);
+            $entityManager->flush();
+            return $this->redirect($this->generateUrl('index'));
+        }
 
         // Nous envoyons notre Bulletin dans le fichier Twig approprié
         return $this->render('index/dataform.html.twig', [

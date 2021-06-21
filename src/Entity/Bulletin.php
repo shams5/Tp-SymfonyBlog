@@ -45,7 +45,8 @@ class Bulletin
     public function getStatus()
     {
         // Retourne le code bootstrap déterminant l'affichage de la couleur de notre <div> alert SELON la catégorie du bulletin en question (Vert pour 'General',  Rouge pour 'Urgent', Bleu ciel pour 'Divers' et Gris pour le reste)
-        switch ($this->category) {
+        $category = ucfirst(strtolower($this->category));
+        switch ($category) {
             case "General":
                 return "success";
             case "Urgent":
@@ -76,7 +77,8 @@ class Bulletin
 
     public function getCategory(): ?string
     {
-        return $this->category;
+        $category = ucfirst(strtolower($this->category));
+        return $category;
     }
 
     public function setCategory(string $category): self
