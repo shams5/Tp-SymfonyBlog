@@ -4,26 +4,33 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="mt-5">
-		<a href="{{ path('index') }}">Liste des Bulletins</a>
-	</h1>
-	{% for bulletin in bulletins %}
-		<div
-			class="alert alert-{{ bulletin.status }}">
-			{# équivaut à écrire  bulletin.getStatus #}
-			<h3 class="display-5">
-				<a href="{{ path('bulletin_display', {'bulletinId':bulletin.Id})}}">{{ bulletin.title }}</a>
-			</h3>
-			<p class="h3">
-				<a href="{{ path('index_category', {'categoryName':bulletin.category}) }}">{{ bulletin.category }}</a>
-			</p>
-			<p>{{ bulletin.content }}</p>
-			<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
-			<a
-				href="{{ path('bulletin_delete', {'bulletinId':bulletin.id}) }}">
-				{# On suit la route bulletin_delete qui mène à la fonction bulletinDelete de la classe IndexController avec en paramètre l'id du bulletin #}
-				<button class="btn btn-danger">Supprimer</button>
-			</a>
-		</div>
-	{% endfor %}
-{% endblock %}
+	<h1 class="display-2">SymfonyBlog</h1><br>
+	{% if dataForm is defined %}
+		<div class="alert alert-info">
+			<h3 class="h3">Créer un bulletin</h3>
+			{{ form(dataForm) }}
+			</div>
+		{% endif %}
+		<h1 class="mt-5">
+			<a href="{{ path('index') }}">Liste des Bulletins</a>
+		</h1>
+		{% for bulletin in bulletins %}
+			<div
+				class="alert alert-{{ bulletin.status }}">
+				{# équivaut à écrire  bulletin.getStatus #}
+				<h3 class="display-5">
+					<a href="{{ path('bulletin_display', {'bulletinId':bulletin.Id})}}">{{ bulletin.title }}</a>
+				</h3>
+				<p class="h3">
+					<a href="{{ path('index_category', {'categoryName':bulletin.category}) }}">{{ bulletin.category }}</a>
+				</p>
+				<p>{{ bulletin.content }}</p>
+				<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
+				<a
+					href="{{ path('bulletin_delete', {'bulletinId':bulletin.id}) }}">
+					{# On suit la route bulletin_delete qui mène à la fonction bulletinDelete de la classe IndexController avec en paramètre l'id du bulletin #}
+					<button class="btn btn-danger">Supprimer</button>
+				</a>
+			</div>
+		{% endfor %}
+	{% endblock %}

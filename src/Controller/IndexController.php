@@ -15,7 +15,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name = "index")
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
 
         // Nous allons nous connecter à notre base de données via l'Entity Manager
@@ -27,7 +27,23 @@ class IndexController extends AbstractController
         // Nous allons utiliser la méthode prédéfinie findAll() de notre Repository
         $bulletins = $bulletinRepository->findAll(); //* Retourne un tableau d'objet
 
+        //* Ici, nous préparons un formulaire de création de bulletin sur notre page d'accueil :
+        // Nous créons un Bulletin vide prêt à l'emploi et nous le lions à notre BulletinType
+        $bulletin = new Bulletin;
+        $bulletinForm = $this->createForm(BulletinType::class, $bulletin);
+
+        // Nous récupérons les informations de la requête utilisateur pour notre formulaire
+        $bulletinForm->handleRequest($request);
+
+        // Une fois le Bulletin validé, nous procédons à sa mise en ligne dans la BDD
+        if ($request->isMethod('post') && $bulletinForm->isValid()) {
+            $entityManager->persist($bulletin);
+            $entityManager->flush();
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         return $this->render('index/index.html.twig', [
+            'dataForm' => $bulletinForm->createView(),
             'bulletins' => array_reverse($bulletins),
         ]);
     }
