@@ -20,7 +20,8 @@ class IndexController extends AbstractController
         // Nous allons nous connecter à notre base de données via l'Entity Manager
         // Nous récupérons ensuite le Repository de Bulletin lequel nous permet d'effectuer des recherches
         $entityManager = $this->getDoctrine()->getManager();
-        $bulletinRepository = $entityManager->getRepository(Bulletin::class); //! class est un attribut statique ?
+        $bulletinRepository = $entityManager->getRepository(Bulletin::class);
+        //* getRepository(Bulletin::class) permet de récupérer la classe bulletinRepository
 
         // Nous allons utiliser la méthode prédéfinie findAll() de notre Repository
         $bulletins = $bulletinRepository->findAll(); //* Retourne un tableau d'objet
@@ -59,6 +60,18 @@ class IndexController extends AbstractController
     }
 
 
+    /**
+     * @Route("/indexCategory/{categoryName}", name="index_category")
+     */
+    public function indexCategory(Request $request, $categoryName)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $bulletinRepository = $entityManager->getRepository(Bulletin::class);
+        //indexCategory est une fonction qui utilise un segment dynamique d'URL pour récupérer une dénomination de category et effectue une recherche dans le Repository de Bulletin
+        $bulletins = $bulletinRepository->findByCategory($categoryName);
+        //Selon la valeur indiquée par le segment optionnel d'URL $categoryName, seuls les Bulletin dont la catégorie correspond seront affichés sur la page indexCategory
+        return $this->render("index/index.html.twig", ["bulletins" => $bulletins]);
+    }
 
     /**
      * @Route("/delete/bulletin/{bulletinId}", name = "bulletin_delete")

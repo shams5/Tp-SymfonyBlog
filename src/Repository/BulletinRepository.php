@@ -7,10 +7,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Bulletin|null find($id, $lockMode = null, $lockVersion = null)
- * @method Bulletin|null findOneBy(array $criteria, array $orderBy = null)
- * @method Bulletin[]    findAll()
- * @method Bulletin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Bulletin|null find($id, $lockMode = null, $lockVersion = null) //* une seule entrée sera rendu
+ * @method Bulletin|null findOneBy(array $criteria, array $orderBy = null) //* une seule entrée sera rendu
+ * @method Bulletin[]    findAll() //* un tableau d'entrée sera rendu
+ * @method Bulletin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) //* un tableau d'entrée sera rendu
  */
 class BulletinRepository extends ServiceEntityRepository
 {
