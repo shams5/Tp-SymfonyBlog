@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Tag;
+use App\Form\TagType;
 use App\Entity\Bulletin;
 use App\Form\BulletinType;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +50,69 @@ class IndexController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/tag", name="tag_list")
+     */
+    public function tagList()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $tagRepository = $entityManager->getRepository(Tag::class);
+        $tags = $tagRepository->findAll();
+
+        return $this->render('index/tag.html.twig', [
+            "tags" => $tags
+        ]);
+    }
+
+    /**
+     * @Route("/create/tag", name="tag_create")
+     */
+    public function tagCreate(Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $tag = new Tag;
+        $tagForm = $this->createForm(TagType::class, $tag);
+        $tagForm->handleRequest($request);
+        if ($request->isMethod('post') && $tagForm->isValid()) {
+            $entityManager->persist($tag);
+            $entityManager->flush();
+            return $this->redirect($this->generateUrl('tag_list'));
+        }
+
+        return $this->render('index/dataform.html.twig', [
+            'dataForm' => $tagForm->createView(),
+            'formName' => 'Création de tag',
+        ]);
+    }
+
+    /**
+     * @Route("/create/bulletin", name="bulletin_create")
+     */
+    public function createBulletin(Request $request)
+    {
+        // Nous récupérons l'Entity Manager afin de préparer l'envoi du Bulletin à créer
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // Nous créons un Bulletin vide prêt à l'emploi et nous le lions à notre BulletinType
+        $bulletin = new Bulletin;
+        $bulletinForm = $this->createForm(BulletinType::class, $bulletin);
+
+        // Nous récupérons les informations de la requête utilisateur pour notre formulaire
+        $bulletinForm->handleRequest($request);
+
+        // Une fois le Bulletin validé, nous procédons à sa mise en ligne dans la BDD
+        if ($request->isMethod('post') && $bulletinForm->isValid()) {
+            $entityManager->persist($bulletin);
+            $entityManager->flush();
+            return $this->redirect($this->generateUrl('index'));
+        }
+
+        // Nous envoyons notre Bulletin dans le fichier Twig approprié
+        return $this->render('index/dataform.html.twig', [
+            'dataForm' => $bulletinForm->createView(),
+            'formName' => 'Création de bulletin',
+        ]);
+    }
     /**
      * @Route("/bulletin/{bulletinId}", name="bulletin_display")
      */
@@ -121,59 +186,5 @@ class IndexController extends AbstractController
     public function indexCheatsheet(): Response
     {
         return $this->render('index/cheatsheet.html.twig');
-    }
-
-
-    /**
-     * @Route("/create/bulletin", name="bulletin_create")
-     */
-    public function createBulletin(Request $request)
-    {
-        // Nous récupérons l'Entity Manager afin de préparer l'envoi du Bulletin à créer
-        $entityManager = $this->getDoctrine()->getManager();
-
-        // Nous créons un Bulletin vide prêt à l'emploi et nous le lions à notre BulletinType
-        $bulletin = new Bulletin;
-        $bulletinForm = $this->createForm(BulletinType::class, $bulletin);
-
-        // Nous récupérons les informations de la requête utilisateur pour notre formulaire
-        $bulletinForm->handleRequest($request);
-
-        // Une fois le Bulletin validé, nous procédons à sa mise en ligne dans la BDD
-        if ($request->isMethod('post') && $bulletinForm->isValid()) {
-            $entityManager->persist($bulletin);
-            $entityManager->flush();
-            return $this->redirect($this->generateUrl('index'));
-        }
-
-        // Nous envoyons notre Bulletin dans le fichier Twig approprié
-        return $this->render('index/dataform.html.twig', [
-            'dataForm' => $bulletinForm->createView(),
-            'formName' => 'Création de bulletin',
-        ]);
-    }
-
-    /**
-     * @Route("/response/{option}", name="index_response")
-     */
-    public function indexResponse(Request $request, $option = "vert"): Response
-    {
-        //Ctrl + clic droit -> Import All Classes
-
-        switch ($option) {
-            case 'rouge':
-                $figure = 'red';
-                break;
-            case 'vert':
-                $figure = 'green';
-                break;
-            case 'bleu':
-                $figure = 'blue';
-                break;
-            default:
-                $figure = "black";
-        }
-
-        return new Response("<div style='width:200px; height:300px; background-color : " . $figure . ";'></div>");
     }
 }

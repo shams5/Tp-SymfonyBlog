@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Tags
+{% endblock %}
+{% block body %}
+	<a href="{{ path('tag_create') }}">
+		<div class="btn btn-success mt-5">Ajouter un tag</div>
+	</a>
+	{% if tags is defined %}
+		<div class="mt-3">
+			<ul class="list-group">
+				{% for tag in tags %}
+					<li class="list-group-item">{{ tag.name }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+{% endblock %}
