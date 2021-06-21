@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Bulletin;
+use App\Form\BulletinType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -104,6 +105,27 @@ class IndexController extends AbstractController
         return $this->render('index/cheatsheet.html.twig');
     }
 
+
+    /**
+     * @Route("/create/bulletin", name="bulletin_create")
+     */
+    public function createBulletin()
+    {
+        // Nous récupérons l'Entity Manager afin de préparer l'envoi du Bulletin à créer
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // Nous créons un Bulletin vide prêt à l'emploi et nous le lions à notre BulletinType
+        $bulletin = new Bulletin;
+        $bulletinForm = $this->createForm(BulletinType::class, $bulletin);
+
+        // Une fois le Bulletin validé, nous procédons à sa mise en ligne dans la BDD
+
+        // Nous envoyons notre Bulletin dans le fichier Twig approprié
+        return $this->render('index/dataform.html.twig', [
+            'dataForm' => $bulletinForm->createView(),
+            'formName' => 'Création de bulletin',
+        ]);
+    }
 
     /**
      * @Route("/response/{option}", name="index_response")
