@@ -28,7 +28,7 @@ class IndexController extends AbstractController
         $bulletins = $bulletinRepository->findAll(); //* Retourne un tableau d'objet
 
         return $this->render('index/index.html.twig', [
-            'bulletins' => $bulletins,
+            'bulletins' => array_reverse($bulletins),
         ]);
     }
 
@@ -71,7 +71,9 @@ class IndexController extends AbstractController
         //indexCategory est une fonction qui utilise un segment dynamique d'URL pour récupérer une dénomination de category et effectue une recherche dans le Repository de Bulletin
         $bulletins = $bulletinRepository->findByCategory($categoryName);
         //Selon la valeur indiquée par le segment optionnel d'URL $categoryName, seuls les Bulletin dont la catégorie correspond seront affichés sur la page indexCategory
-        return $this->render("index/index.html.twig", ["bulletins" => array_reverse($bulletins)]);
+        return $this->render("index/index.html.twig", [
+            "bulletins" => array_reverse($bulletins)
+        ]);
     }
 
     /**
