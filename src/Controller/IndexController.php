@@ -28,7 +28,7 @@ class IndexController extends AbstractController
         $bulletins = $bulletinRepository->findAll(); //* Retourne un tableau d'objet
 
         return $this->render('index/index.html.twig', [
-            'bulletins' => array_reverse($bulletins),
+            'bulletins' => $bulletins,
         ]);
     }
 
