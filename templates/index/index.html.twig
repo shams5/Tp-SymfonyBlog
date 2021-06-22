@@ -27,6 +27,16 @@
 				</p>
 				<p>{{ bulletin.content }}</p>
 				<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
+				<p>
+					<b>Tags :
+					</b>
+					{% if bulletin.tags is empty %}
+						Aucun;
+					{% endif %}
+					{% for tag in bulletin.tags %}
+						{{ tag.name }}
+					{% endfor %}
+				</p>
 				<a
 					href="{{ path('bulletin_delete', {'bulletinId':bulletin.id}) }}">
 					{# On suit la route bulletin_delete qui mène à la fonction bulletinDelete de la classe IndexController avec en paramètre l'id du bulletin #}
