@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Tag;
 use App\Entity\Bulletin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,6 +30,12 @@ class BulletinType extends AbstractType
                 ],
                 'expanded' => false, //* pour avoir des boutons mettre true
                 'multiple' => false, //* pour en choisir plsrs ou pas
+            ])
+            ->add('tags', EntityType::class, [
+                'label' => 'Tags',
+                'class' => Tag::class,
+                'expanded' => true,
+                'multiple' => true,
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu'
