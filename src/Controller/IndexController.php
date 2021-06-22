@@ -9,6 +9,8 @@ use App\Form\BulletinType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class IndexController extends AbstractController
@@ -84,6 +86,74 @@ class IndexController extends AbstractController
             'formName' => 'Création de tag',
         ]);
     }
+
+
+    /**
+     * @Route("/create/tags",name="tags_create")
+     */
+    public function createMultipleTags(Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $tagsForm = $this->createFormBuilder()
+            ->add('name1', TextType::class, [
+                'label' => 'Nom du tag',
+                'attr' => [
+                    'required' => false
+                ]
+            ])
+            ->add('name2', TextType::class, [
+                'label' => 'Nom du tag',
+                'attr' => [
+                    'required' => false
+                ]
+            ])
+            ->add('name3', TextType::class, [
+                'label' => 'Nom du tag',
+                'attr' => [
+                    'required' => false
+                ]
+            ])
+            ->add('name4', TextType::class, [
+                'label' => 'Nom du tag',
+                'attr' => [
+                    'required' => false
+                ]
+            ])
+            ->add('name5', TextType::class, [
+                'label' => 'Nom du tag',
+                'attr' => [
+                    'required' => false
+                ]
+            ])
+            ->add('valider', SubmitType::class, [
+                'label' => 'Valider',
+                'attr' => [
+                    'style' => 'margin-top : 5px',
+                    'class' => 'btn btn-success',
+                ],
+            ])
+            ->getForm();
+
+        $tagsForm->handleRequest($request);
+
+        if ($request->isMethod('post') && $tagsForm->isValid()) {
+            $datas = $tagsForm->getData();
+            foreach ($datas as $data) {
+                $tag = new Tag;
+                $tag->setName((string)$data);
+                $entityManager->persist($tag);
+            }
+
+            $entityManager->flush();
+            return $this->redirect($this->generateUrl('tag_list'));
+        }
+
+        return $this->render('index/dataform.html.twig', [
+            "formName" => "Création de tags multiples",
+            "dataForm" => $tagsForm->createView()
+        ]);
+    }
+
 
     /**
      * @Route("/create/bulletin", name="bulletin_create")

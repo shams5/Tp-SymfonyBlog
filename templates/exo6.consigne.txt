@@ -1,0 +1,7 @@
+
+Pour ceux qui ont déjà fini et qui veulent essayer quelque chose de nouveau: 
+	Créer une fonction "createMultipleTags", qui affiche un formulaire de cinq champs + bouton de validation, et qui génère et fait persister autant d'Entity Tags qu'il existe de champs
+    Ainsi, cette fonction créera autant de Tags qu'il existe de champs remplis via les instructions dans le Controller
+    Pour cela, utiliser la fonction générant des formulaires internes à la fonction, qui est "$this->createFormBuilder()". Cette fonction utilise des méthodes add() de la même manière qu'un formulaire externe, et se conclut avec un getForm()
+    Afin de rendre un champ non obligatoire à la complétion, ajouter 'required' => false, dans les options du champ
+    Utiliser notre page twig générique dataform.html.twig pour créer les tags

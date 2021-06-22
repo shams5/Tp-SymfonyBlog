@@ -4,9 +4,14 @@
 	{{ parent() }}
 {% endblock %}
 {% block body %}
-	<a href="{{ path('tag_create') }}">
-		<div class="btn btn-success mt-5">Ajouter un tag</div>
-	</a>
+	<div class="d-flex justify-content-between">
+		<a href="{{ path('tag_create') }}">
+			<div class="btn btn-success mt-5">Ajouter un tag</div>
+		</a>
+		<a href="{{ path('tags_create') }}">
+			<div class="btn btn-success mt-5">Ajouter 5 tags</div>
+		</a>
+	</div>
 	{% if tags is defined %}
 		<div class="mt-3">
 			<ul class="list-group">
