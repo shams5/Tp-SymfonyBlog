@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BulletinRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,9 +39,16 @@ class Bulletin
      */
     private $creationDate;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag",inversedBy="bulletins", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
+        $this->tags = new ArrayCollection();
     }
 
     public function getStatus()
@@ -108,6 +117,30 @@ class Bulletin
     public function setCreationDate(\DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }
