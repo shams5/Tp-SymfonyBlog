@@ -158,6 +158,23 @@ class IndexController extends AbstractController
     }
 
     /**
+     * @Route("/delete/tag/{tagId}", name="tag_delete")
+     */
+    public function tagDelete(Request $request, $tagId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $tagRepository = $entityManager->getRepository(Tag::class);
+        $tag = $tagRepository->find($tagId);
+        if (!$tag) {
+            return $this->redirect($this->generateUrl('tag_list'));
+        }
+        $entityManager->remove($tag);
+        $entityManager->flush();
+        return $this->redirect($this->generateUrl('tag_list'));
+    }
+
+
+    /**
      * @Route("/delete/bulletin/{bulletinId}", name = "bulletin_delete")
      */
     public function bulletinDelete(Request $request, $bulletinId)

@@ -6,3 +6,4 @@ Implémentation des Tags dans notre application
 2/ Implémenter TagFixtures et utiliser l'élément Fixtures afin de placer 10 tags (Tag1, Tag2, etc)
 3/ Créer une nouvelle fonction de Controller nommée tagList(), laquelle est atteignable via notre navbar, nous transmet une liste Bootstrap de tous les Tags existants, ainsi qu'en amont un bouton [Ajouter Tag], lequel nous renvoie vers un formulaire de création de Tag
 4/ Créer un nouveau formulaire externalisé, TagType, lequel ne contient donc que deux champs, 'name' et 'valider', et créer une fonction dans IndexController nommée tagCreate(), laquelle fait appel à ce formulaire externalisé et permet son utilisation à travers le template dataform.html.twig
+5/ Ajoutez une fonction deleteTag(), qui permet de supprimer le Tag indiqué par le segment d'URL dynamique
