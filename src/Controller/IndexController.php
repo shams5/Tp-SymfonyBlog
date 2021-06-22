@@ -196,6 +196,39 @@ class IndexController extends AbstractController
             'formName' => 'Création de bulletin',
         ]);
     }
+
+    /**
+     * @Route("/edit/bulletin/{bulletinId}",name="bulletin_edit")
+     */
+    public function editBulletin(Request $request, $bulletinId)
+    {
+        // Cette fonction a pour but de modifier un bulletin enregistré dans notre BDD
+        // Elle récupère pour ce but le bulletin dont l'ID est indiqué et l'intégre à un formulaire
+        // Nous faisons donc appel à l'Entity Manager et au Repository pertinent
+        $entityManager = $this->getDoctrine()->getManager();
+        $bulletinRepository = $entityManager->getRepository(Bulletin::class);
+        // Nous recherchons le Bulletin dont l'ID est indiqué. Le cas échéant, nous revenons vers l'index
+        $bulletin = $bulletinRepository->find($bulletinId);
+        if ($bulletin) {
+            return $this->redirect($this->generateUrl('index'));
+        }
+        // Une fois le bulletin récupéré, nous créons un nouveau formulaire BulletinType auquel il sera lié
+        $bulletinForm = $this->createForm(BulletinType::class, $bulletin);
+        // Nous transmettons les valeurs de $request à notre bulletin
+        // Si le formulaire est rempli et validé, nous le transmettons à notre BDD
+        $bulletinForm->handleRequest($request);
+        if ($request->isMethod('post') && $bulletinForm->isValid()) {
+            $entityManager->persist($bulletin);
+            $entityManager->flush();
+            return $this->redirect($this->generateUrl('index'));
+        }
+        // Nous requérons un render du template dataform.html.twig
+        return $this->render('index/dataform.html.twig', [
+            'formName' => 'Modification de Bulletin',
+            'dataForm' => $bulletinForm,
+        ]);
+    }
+
     /**
      * @Route("/bulletin/{bulletinId}", name="bulletin_display")
      */
