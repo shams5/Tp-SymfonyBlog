@@ -33,6 +33,7 @@ class BulletinType extends AbstractType
             ])
             ->add('tags', EntityType::class, [
                 'label' => 'Tags',
+                'choice_label' => 'name',
                 'class' => Tag::class,
                 'expanded' => true,
                 'multiple' => true,

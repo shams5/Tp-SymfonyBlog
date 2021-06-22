@@ -209,7 +209,7 @@ class IndexController extends AbstractController
         $bulletinRepository = $entityManager->getRepository(Bulletin::class);
         // Nous recherchons le Bulletin dont l'ID est indiqué. Le cas échéant, nous revenons vers l'index
         $bulletin = $bulletinRepository->find($bulletinId);
-        if ($bulletin) {
+        if (!$bulletin) {
             return $this->redirect($this->generateUrl('index'));
         }
         // Une fois le bulletin récupéré, nous créons un nouveau formulaire BulletinType auquel il sera lié
@@ -225,7 +225,7 @@ class IndexController extends AbstractController
         // Nous requérons un render du template dataform.html.twig
         return $this->render('index/dataform.html.twig', [
             'formName' => 'Modification de Bulletin',
-            'dataForm' => $bulletinForm,
+            'dataForm' => $bulletinForm->createView(),
         ]);
     }
 

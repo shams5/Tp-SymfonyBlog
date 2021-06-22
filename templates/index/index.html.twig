@@ -32,6 +32,11 @@
 					{# On suit la route bulletin_delete qui mène à la fonction bulletinDelete de la classe IndexController avec en paramètre l'id du bulletin #}
 					<button class="btn btn-danger">Supprimer</button>
 				</a>
+				<a
+					href="{{ path('bulletin_edit', {'bulletinId':bulletin.id}) }}">
+					{# On suit la route bulletin_edit qui mène à la fonction editBulletin de la classe IndexController avec en paramètre l'id du bulletin #}
+					<button class="btn btn-warning">Modifier</button>
+				</a>
 			</div>
 		{% endfor %}
 	{% endblock %}
