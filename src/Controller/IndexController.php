@@ -71,9 +71,16 @@ class IndexController extends AbstractController
      */
     public function tagCreate(Request $request)
     {
+        // Cette fonction a pour but d'afficher le formulaire de création de Tags
+        // Pour communiquer avec notre BDD, nous avons besoin de l'Entity Manager
         $entityManager = $this->getDoctrine()->getManager();
+
+        // Nous créons un nouveau Tag et nous le lions au formulaire à créer
         $tag = new Tag;
         $tagForm = $this->createForm(TagType::class, $tag);
+
+        // Nous transmettons la requête au formulaire avant de vérifier sa validité
+        // Nous renvoyons ensuite l'utilisateur vers la liste de Tags afin qu'il puisse constater l'ajout
         $tagForm->handleRequest($request);
         if ($request->isMethod('post') && $tagForm->isValid()) {
             $entityManager->persist($tag);
@@ -81,6 +88,7 @@ class IndexController extends AbstractController
             return $this->redirect($this->generateUrl('tag_list'));
         }
 
+        // Nous transmettons notre nouveau formulaire à dataform.html.twig
         return $this->render('index/dataform.html.twig', [
             'dataForm' => $tagForm->createView(),
             'formName' => 'Création de tag',
@@ -97,33 +105,33 @@ class IndexController extends AbstractController
         $tagsForm = $this->createFormBuilder()
             ->add('name1', TextType::class, [
                 'label' => 'Nom du tag',
-                'attr' => [
-                    'required' => false
-                ]
+
+                'required' => false
+
             ])
             ->add('name2', TextType::class, [
                 'label' => 'Nom du tag',
-                'attr' => [
-                    'required' => false
-                ]
+
+                'required' => false
+
             ])
             ->add('name3', TextType::class, [
                 'label' => 'Nom du tag',
-                'attr' => [
-                    'required' => false
-                ]
+
+                'required' => false
+
             ])
             ->add('name4', TextType::class, [
                 'label' => 'Nom du tag',
-                'attr' => [
-                    'required' => false
-                ]
+
+                'required' => false
+
             ])
             ->add('name5', TextType::class, [
                 'label' => 'Nom du tag',
-                'attr' => [
-                    'required' => false
-                ]
+
+                'required' => false
+
             ])
             ->add('valider', SubmitType::class, [
                 'label' => 'Valider',
@@ -134,16 +142,21 @@ class IndexController extends AbstractController
             ])
             ->getForm();
 
+        //* Nous transmettons la requête client à notre formulaire, et s'il est valide, nous transmettons les Tags créés à la BDD
         $tagsForm->handleRequest($request);
 
         if ($request->isMethod('post') && $tagsForm->isValid()) {
+            //* getData() est une fonction récupérant les valeurs de chaque champ de formulaire et les transmet sous la forme d'un tableau associatif (clef => champ, valeur => valeur)
             $datas = $tagsForm->getData();
+            // Nous allons utiliser une boucle foreach pour parcourir chaque champ et créer un Tag si ce dernier a été rempli
             foreach ($datas as $data) {
-                $tag = new Tag;
-                $tag->setName((string)$data);
-                $entityManager->persist($tag);
+                if ($data) {
+                    $tag = new Tag;
+                    $tag->setName((string)$data);
+                    $entityManager->persist($tag);
+                }
             }
-
+            // Nous appliquons chaque demande de persist faite lors de la boucle avant une redirection vers tagList
             $entityManager->flush();
             return $this->redirect($this->generateUrl('tag_list'));
         }
