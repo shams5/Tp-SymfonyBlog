@@ -65,9 +65,9 @@ class IndexController extends AbstractController
         $tag = $tagRepository->findOneByName($tagName);
         // Si le tag n'existe pas, nous revenons vers la liste des tags
         if (!$tag) {
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('tag_list'));
         }
-        return $this->render('index/tagdiplay.html.twig', [
+        return $this->render('index/tagdisplay.html.twig', [
             "tag" => $tag
         ]);
     }

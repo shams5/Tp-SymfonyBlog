@@ -20,12 +20,14 @@
 					{% for tag in tags %}
 						<li class="list-group-item d-flex justify-content-between">
 							{{ tag.name }}
-							<a href="{{ path('tag_display', {"tagName":tag.name}) }}">
-								<div class="btn btn-primary">Afficher</div>
-							</a>
-							<a href="{{ path('tag_delete', {"tagId":tag.id}) }}">
-								<div class="btn btn-danger">Supprimer</div>
-							</a>
+							<div class="d-flex justify-content-end">
+								<a href="{{ path('tag_display', {"tagName":tag.name}) }}">
+									<div class="btn btn-primary">Afficher</div>
+								</a>
+								<a href="{{ path('tag_delete', {"tagId":tag.id}) }}">
+									<div class="btn btn-danger">Supprimer</div>
+								</a>
+							</div>
 						</li>
 					{% endfor %}
 				</ul>

@@ -1,1 +1,28 @@
 {% extends "base.html.twig" %}
+
+{% block title %}Tag:
+	{{ tag.name }}
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<div style="max-width: 700px; margin:auto;" class="mt-5">
+		<h1 class="display-4">{{ tag.name }}</h1>
+
+		<ul class="mt-5 list-group list-group-flush">
+			{% for bulletin in tag.bulletins %}
+				<li class="list-group-item d-flex justify-content-between">
+					{{ bulletin.title }}
+					<div class="d-flex justify-content-end">
+						<a href="{{ path('bulletin_edit', {'bulletinId' : bulletin.id}) }}">
+							<div class="btn btn-warning">Modifier</div>
+						</a>
+						<a href="{{ path('bulletin_delete', {'bulletinId' : bulletin.id}) }}">
+							<div class="btn btn-danger">Supprimer</div>
+						</a>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}
