@@ -52,6 +52,26 @@ class IndexController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/tag/display/{tagName}", name="tag_display")
+     */
+    public function tagDisplay(Request $request, $tagName)
+    {
+        // Cette fonction affiche le nom d'un tag ainsi que la liste des bulletins qui lui sont liés
+        // Pour cela nous devons dialoguer avec la BDD : nous récupérons l'Entity Manager et le Repository pertinent
+        $entityManager = $this->getDoctrine()->getManager();
+        $tagRepository = $entityManager->getRepository(Tag::class);
+        $tag = $tagRepository->findOneByName($tagName);
+        // Si le tag n'existe pas, nous revenons vers la liste des tags
+        if (!$tag) {
+            return $this->redirect($this->generateUrl('index'));
+        }
+        return $this->render('index/tagdiplay.html.twig', [
+            "tag" => $tag
+        ]);
+    }
+
     /**
      * @Route("/tag", name="tag_list")
      */

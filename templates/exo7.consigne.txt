@@ -1,0 +1,4 @@
+
+CONSIGNE:
+Utiliser le bouton "Afficher", nouvellement créé dans taglist.html.twig, pour mener l'utilisateur vers une nouvelle fonction de IndexController, appelée tagDisplay(), qui affiche un tableau de même type que taglist mais renfermant les bulletins lié au tag affiché.
+Chaque élément de liste doit posséder deux boutons, modifier et supprimer, qui respectivement, modifient et suppriment le bulletin en question grâce aux fonctions de Controller appropriées.

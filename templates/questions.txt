@@ -1,0 +1,2 @@
+Dans bulletin.php et tag.php, mappedBy et inversedBy contiennent les noms de ... ? => attributs de la classe liée
+Dans BulletinType, à quoi correspondent class et choice_label ?

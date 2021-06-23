@@ -39,7 +39,7 @@ class Tag
      * @ORM\ManyToMany(targetEntity="App\Entity\Bulletin", mappedBy="tags", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
-    private $bulletins;
+    private $bulletins; //* Attributs relié à Bulletin.php avec le inversedBy
 
     public function __construct()
     {

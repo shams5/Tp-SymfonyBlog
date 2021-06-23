@@ -28,7 +28,9 @@
 				<p>{{ bulletin.content }}</p>
 				<p class="lead">{{ bulletin.creationDate|date('d/m/Y à G:i:s', 'Europe/Paris') }}</p>
 				<p>
-					<b>Tags :
+					<b>
+						<a href="{{ path('tag_list') }}">Tags</a>
+						:
 					</b>
 					{% if bulletin.tags is empty %}
 						Aucun;

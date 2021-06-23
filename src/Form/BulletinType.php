@@ -29,12 +29,12 @@ class BulletinType extends AbstractType
                     'Urgent' => 'urgent',
                 ],
                 'expanded' => false, //* pour avoir des boutons mettre true
-                'multiple' => false, //* pour en choisir plsrs ou pas
+                'multiple' => false, //* pour pouvoir en choisir plsrs ou pas
             ])
-            ->add('tags', EntityType::class, [
+            ->add('tags', EntityType::class, [ //* on récupère une entité
                 'label' => 'Tags',
-                'choice_label' => 'name',
-                'class' => Tag::class,
+                'choice_label' => 'name', //* On accéde à l'attribut name de l'objet
+                'class' => Tag::class, //* permet de préciser quelle entité on récupère
                 'expanded' => true,
                 'multiple' => true,
             ])
