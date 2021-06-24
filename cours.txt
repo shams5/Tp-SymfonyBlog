@@ -459,6 +459,90 @@ Enfin, le formulaire peut, directement dans la configuration Symfony, être conf
   
 Il est à noter que l'inclusion des CSS bootstrap reste nécessaire pour ce choix de style dans les formulaire générés.
 
+========================================================================================================================================================================================================================================================================================================================================================
+
+Les relations entre Entity :
+https://symfony.com/doc/current/doctrine/associations.html
+
+
+Doctrine incorpore un système de relation entre Entités qui est une version orienté objet de la jointure entre tables. Dans une application web au fonctionnement complexe, nous pouvons désirer ne pas placer toutes nos informations au sein de la même table. De même, il se peut que plusieurs tables au but différent aient besoin de la même information. A ce moment-ci, il vaut mieux créer un réseau de plusieurs tables liées les unes aux autres et éviter le problème de la redondance ou même des incohérences du fait de la mise à jour partielle de données.
+En PHP classique, nous gérons cette solution sous la forme de jointures et clefs étrangères. Doctrine utilise la notion de relation entre Entités.
+
+Il existe trois types de relations entre Entities: OneToOne, OneToMany/ManyToOne, et le ManyToMany.
+
+Le OneToOne est un enregistrement d'une table propriétaire envers une table inverse. Cet enregistrement est limité dans le sens que l'entrée de la table propriétaire ne peut être associée qu'à une seule entrée de la table inverse.
+
+Le OneToMany est un enregistrement d'une table propriétaire qui peut être liée à plusieurs enregistrements de la table inverse, mais une entrée de la table inverse ne peut être liée qu'à une seule entrée de la table propriétaire. Le ManyToOne est la même chose, mais inverse.
+
+Le dernier type de relation est le ManyToMany, où il est possible pour une entrée d'une table propriétaire d'avoir autant de relation que désiré avec les entrées de la table inverse, et inversement.
+
+Les relations entre Entités ne sont pas placées sur un pied égal: Il existe toujours une table propriétaire et une table secondaire (ou "inverse"). Aussi, si, selon le type de relation, les possibilités de liaisons entre entrées de deux tables peuvent varier, une relation entre Entités, qu'elle soit OneToOne ou ManyToMany, est TOUJOURS une relation limitée à DEUX Entités.
+Il se peut qu'une même table possède une relation OneToOne avec une première table et une relation ManyToMany avec une seconde. Les types de relation ne concernent que les entrées des deux tables concernées. Les limitations ou leur absence ne concernent pas les tables étrangères à cette relation.
+
+
+La relation OneToOne
+
+Afin de créer une relation OneToOne, il faut déclarer une variable avant de la lier à l'Entity reliée à la nôtre, via les annotations.
+
+	/**
+	* @ORM\OneToOne(targetEntity="App\Entity\Exemple", cascade={"persist"})
+	* @ORM\JoinColumn(nullable=true)
+	*/
+	private $exemple;
+
+OneToOne désigne le type de relation entre les deux tables.
+targetEntity renseigne l'Entity que nous impliquons dans cette relation.
+cascade est une indication pour la configuration de la clef étrangère entre les deux tables en SQL.
+JoinColumn(nullable=true) est une information supplémentaire permettant à l'entrée exemple de notre table de pouvoir posséder une valeur null. Etant donné que nous ne pourrons pas forcément lier cette entrée à une autre Entity dès sa création, il est préférable de pouvoir créer cette entrée sans lien si la situation l'exige avant de mettre en place cette jointure plus tard.
+
+Une fois que cette série d'instructions et cette déclaration de variable a été notée, nous allons utiliser la commande de notre terminal:
+	php bin/console make:entity --regenerate App
+Cette commande vérifie l'intégrité de nos classes Entity et génère automatiquement des getters et setters pour les attributs qui en sont dépourvus.
+
+
+La relation ManyToMany
+
+Si la relation OneToOne concerne exclusivement une entrée de la première Entity avec une seconde de la seconde Entity, une relation ManyToMany autorise les entrées des deux Entities à posséder autant de relations que possible. Il est donc possible pour une entrée d'une première Entity de posséder une relation avec toutes les autres entrées de la seconde Entity.
+La mise en place d'une relation de type ManyToMany va provoquer la création par Doctrine d'une table intermédiaire dont le nom se compose des deux Entities séparées par un "_" (par exemple, Produit_Category)
+
+	/**
+	* @ORM\ManyToMany(targetEntity="App\Entity\Exemple", cascade={"persist"})
+	* @ORM\JoinColumn(nullable=true)
+	*/
+	private $exemples;
+
+Si la mise en place de la variable chargée d'assurer la liaison ManyToMany entre les deux tables ressemble à celle de la liaison de type OneToOne, il est à remarquer que la variable $exemples ici possède un "s".
+En effet, dans ce cas de figure, notre Entity va conserver plusieurs instances d'Entites de classe Exemple. L'attribut $exemples, afin de s'adapter à cette situation, ne sera donc pas une simple variable mais un tableau de type ArrayCollection, qui possèdera toutes les instances d'Entities liées à notre Entity propriétaire.
+
+
+Les relations bidirectionnelles
+
+Ecrites en l'état, nos relations entre Entities possèdent un défaut: la relation ne peut être utilisée que dans un sens, qui est le sens de la table propriétaire vers la table inverse. Si, dans notre code, nous faisons appel à une Entity de la table inverse, et si nous lui demandons à quelles autres entrées de l'autre Entity elle est liée, nous ne pourrons pas obtenir de réponse.
+Si notre table principale possède un attribut dédié indiquant avec quelles autres instances d'Entity notre objet possède une relation, cette variable n'existe pas dans l'Entity inverse. Il est cependant possible de l'ajouter.
+Cet attribut optionnel marque ce que nous appelons une relation bidirectionnelle: de l'Entity principale vers l'Entity inverse, mais également de l'Entity inverse vers l'Entity principale.
+
+	(classe ContreExemple)
+	/**
+	* @ORM\ManyToMany(targetEntity="App\Entity\Exemple", mappedBy="contreExemples")
+	*/
+	private $exemples;
+
+L'option mappedBy indique le nom de la variable au sein de l'Entity principale qui fait référence à notre classe. Dans le cadre d'une relation bidirectionnelle, notre Entity principale possède alors une nouvelle option du même type, nommée "InversedBy".
+
+
+Les formulaires de nos Entités liées
+
+Une fois que nous avons créé des Entités et que nous avons établi des relations entre elles, il faut à présent pouvoir créer des Entités qui appliquent ces relations selon les règles que nous avons établies.
+Pour cela, il faudra arranger nos formulaire afin d'incorporer cette nouvelle fonction, étant donné que nous ne devons pas forcer les liens entre Entités directement via notre table SQL ou PhpMyAdmin: en utilisant Symfony, nous devons nous limiter à la gestion des Entités. La gestion des tables est du ressort de l'ORM Doctrine uniquement.
+Une fois les relations notées via Doctrine, les colonnes relatives à l'Entity liée sont créées/modifiées. Nous pouvons remarquer que le nom de la colonne associée peut changer. Encore une fois, ceci n'est pas pertinent à Symfony. Si le nom d'une colonne passe de, par exemple, "category" à "category_id", le nom de l'attribut qui nous intéresse est celui spécifié dans notre classe PHP Entity "Produit". Le changement de nom de l'entrée du tableau est effectué par Doctrine pour simplifier le travail de lecture et est automatiquement pris en charge: nous n'avons pas à nous en préoccuper.
+
+En ce qui concerne la modification nécessaire du formulaire, trois options s'offrent à nous:
+	- La première possibilité consister à laisser (ou à créer) un champ classique pour l'entrée que nous désirons utiliser pour notre Entity liée, puis à récupérer la valeur entrée, utiliser une recherche dans la base de données pour trouver une valeur semblable, et si oui, établir un lien avec l'instance d'Entity pertinente ou la créer le cas échéant. Il s'agit d'une solution fastidieuse.
+	- La seconde possibilité consister à imbriquer le formulaire de l'Entity secondaire, c'est-à-dire dotée du rôle dit "inverse" de la relation, à l'intérieur du formulaire de l'Entity principale. A la complétion de ce superformulaire, deux Entités seront créées en même et le lien entre les deux sera automatiquement validé. Il s'agit d'une solution efficace si nous désirons créer deux Entities liées par une relation unique de type OneToOne.
+	- La troisième possibilité consiste à utiliser un champ spécial dédié à la création de liens entre une (ou plusieurs) Entity déjà existante et une Entity en cours de création via formulaire. Il s'agit d'un champ dit "EntityType". Ce champ permet de sélectionner parmi les entrées existantes d'une table celle(s) considérée(s) pertinente(s) pour une jointure avec l'Entity que nous désirons créer ou modifier.
+
+Le fonctionnement des formulaires étant entièrement couvert par Symfony, nous n'avons qu'à nous préoccuper du type d'option dont nous avons besoin selon notre situation. Il suffit de choisir notre type et de spécifier les options en nous aidant de la documentation officielle.
+
 
 ========================================================================================================================================================================================================================================================================================================================================================
 
@@ -588,6 +672,7 @@ Available commands:
   make:crud                                  Creates CRUD for Doctrine entity class
   make:docker:database                       Adds a database container to your docker-compose.yaml file
   make:entity                                Creates or updates a Doctrine entity class, and optionally an API Platform resource
+
   make:entity --regenerate App               Génère des setters et des getters pour tous les attributs qui en sont dépourvus (sauf $id)
   make:fixtures                              Creates a new class to load Doctrine fixtures
   make:form                                  Creates a new form class
@@ -639,6 +724,7 @@ Available commands:
   Modifier le fichier .env => commenter postgres,  modifier et décommenter mysql
 
   Créer la BDD avec la commande et s'y connecter :
+  
   php bin/console doctrine:database:create 
 
   Créer le dossier public/assets qui contient les dossiers img, css et js
