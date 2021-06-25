@@ -118,6 +118,69 @@ Le dossier Vendor contient toutes les bibliothèques utilisées par Symfony. Il 
 
 ========================================================================================================================================================================================================================================================================================================================================================
 
+-----
+Logique de base de notre application Symfony
+
+Dans le cadre de notre application web, le fonctionnement est basé sur un échange répété de requête et de réponse.
+Un accès à une application web se fait via une requête HTTP, qui contient plusieurs informations tel que le nom de du site, et d'autres paramètres passés non seulement par la barre d'adresse mais pas forcément. La requête HTTP la plus simple comportera des informations annexes telles que la version de notre navigateur, notre adresse IP, notre système d'exploitation, etc. Aussi, les requêtes que nous envoyons peuvent être plus complexes: par exemple, les formulaires de type POST. Un formulaire de type POST contient des informations passées via requête HTTP: elles ne sont cependant pas visibles dans la barre d'adresse.
+Suite à cette requête, le serveur rend une réponse, basée sur la même syntaxe HTTP. Dans le cas de Symfony, deux bibliothèques particulières ont été développées pour gérer les requêtes et les réponses.
+Il s'agit des classes Symfony Request et Response.
+
+La classe Response
+
+La classe Response, dans notre application Symfony, crée un objet particulier: cet objet sera la réponse envoyée par notre application pour répondre à la requête client.
+Afin de pouvoir utiliser l'objet Response dans notre controller, il faut toujours être qu'il soit mentionné dans les Use en début de page. En l'espèce:
+	use Symfony\Component\HttpFoundation\Response;
+Dans le cadre de la première page web générée par Symfony lors de la création d'un nouveau controller, la fonction par défaut mentionne le fait qu'elle retourne un objet de type Response, mais le contenu de l'instruction mentionne une fonction qui est "render".
+	return $this->render($url, array($args));
+Ici, la fonction render(), appelée depuis notre controller (ce que nous pouvons constater du fait de la variable $this, qui indique une fonction contenue par la classe, ici utilisée par le controller instancié*), génère automatiquement un objet de type Response très complexe, qui prendre plusieurs paramètres. Le premier paramètre est un lien vers un template qui servira de base pour générer la page web. Le second paramètre est un tableau associatif (aussi dit dictionnaire dans d'autres langages informatiques), qui contient des options à tranmettre à l'application en charge de générer les templates, qui dans le cas de Symfony, est Twig.
+*instancié: sous forme d'objet. Un objet est le produit d'une classe, et est dit instancié par la classe. Nous parlons également d'instance de classe pour parler d'un objet.
+
+Ici, cette réponse, ou cet objet instancié par la classe Response, est si complexe qu'il demande une autre application (Twig) pour le créer et le gérer. Mais nous pouvons envoyer des types de réponse/response beaucoup plus simples, sous la forme d'un tableau JSON par exemple, ou même une simple chaine de caractères.
+Nous pouvons créer une instance de Response beaucoup plus simple en retournant le nouvel objet et en l'instanciant à la même occasion:
+	return new Response($string, Response::HTTP_OK, ['content-type' => 'text/html'])
+HTTP_OK est une constante de valeur 200. En HTTP, il s'agit d'un code indiquant que la requête a abouti sans erreur. Utiliser cette constante permet d'avoir un repère efficace, contextualisé et facile à lire pour un humain.
+[La liste des différents codes HTTP est accessible sur wikipédia: à la page https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP]
+Une Response de type text est un moyen idéal d'obtenir, en debug, la valeur d'une variable donnée ou de s'assurer qu'une fonction tourne bien comme prévu, en utilisant l'instruction return comme point de sortie temporaire d'une fonction pour vérifier son comportement. Elle reste cependant de part sa nature très basique peu accueillante pour le client, et est donc un type d'instance à réserver dans le cadre du développement de l'application.
+
+Il existe d'autres types de Response, tels que JsonResponse
+	use Symfony\Component\HttpFoundation\JsonResponse;
+Qui lui rendra une réponse sous forme de tableau associatif. En bref, Symfony peut rendre plusieurs types de Response, qu'il s'agisse d'un texte simple, d'un fichier JSON, ou encore d'une page web complète générée via l'action de la bibliothèque associée Twig.
+Dans le cas de notre application, nous allons avant tout employer Twig pour développer notre site web.
+Il faut comprendre que malgré une nature identique, l'objet Response créé au moment du return et celui obtenu à partir de la fonction render() sont différents. La web générée ne l'est qu'à la suite d'un long processus géré par une application externe (Twig), qui renvoie le résultat à la classe Response de Symfony. Il s'agit bel et bien d'une Response, mais bien plus longue et complexe en ce qui concerne son contenu.
+La base de la classe Response serait donc nécessaire pour l'utilisateur qui ne désire pas utiliser Twig et souhaiterait utiliser par exemple sa propre bibliothèque de template.
+
+
+La classe Request
+
+A l'instar de la classe Response, la classe Request génère un objet qui, cette fois-ci, servira à traiter de manière plus efficace la requête utilisateur. Comme dit plus haut, toute communication de l'utilisateur avec un site web est une requête. La partie client passe une requête via différents paramètres à une partie serveur, qui prend en compte la requête dans son entièreté, l'accepte ou la refuse, et en cas d'acceptation, renvoie un fichier ou une page web générée au préalable.
+Les éléments de la requêtes contiennent des éléments plus "évidents", tels que l'URL de la page que nous désirons visiter, mais d'autres éléments plus subtils tels que l'adresse IP, le type de navigateur, le système d'exploitation, etc. Une requête contient également d'autres éléments optionnels tels que les données d'un formulaire que le client envoie à la partie serveur.
+Dans le cadre de Symfony, la gestion de tous ces éléments de la requête client sont pris en charge par l'objet instancié par la classe Request. Pour cela, il faut tout d'abord s'assurer que la classe Request soit bel et bien mentionnée dans les "use" du Controller:
+	use Symfony\Component\HttpFoundation\Request;
+
+Il faut ensuite ajouter un objet Request dans les paramètres/arguments de notre fonction.
+	public function index(Request $request)
+Une fois que ceci est fait, l'objet de la classe Request est automatiquement instancié par Symfony et devient utilisable dans notre fonction.
+L'objet Request nous permet d'accéder facilement aux différentes informations transmises via la requête client et donc de les traiter de manière plus efficace. Entre autres, dans le cadre de Symfony, l'objet $request devient notre pont d'accès aux variables dites superglobales. Par exemple, afin d'accéder aux variables contenues par la superglobale $_GET, il faudra utiliser l'objet $request et son "parameter bag" query. Par exemple, dans le cas d'une adresse web telle que:
+	http://monsiteweb.com/index?data=foobar
+Au lieu d'utiliser $_GET['data'], nous devrons employer $request tel que:
+
+	public function index(Request $request){
+		$data = $request->query->get('data'); Nous récupérons le contenu de type GET via la fonction query de notre objet $request et nous le plaçons à l'intérieur de la variable $data
+		return new Response($data); // Nous affichons le contenu de $data en Response
+	}
+
+Dans le cas de GET, il est possible de récupérer toutes les valeurs de la superglobales en utilisant la fonction all().
+	$dataAll = $request->query->all(); // Nous récupérons toute la superglobale $_GET
+
+De même, afin d'accéder aux variables de la superglobales $_SESSION, il suffit d'écrire l'instruction suivante:
+	$session = $request->getSession();
+Ceci signifie donc que toute fonction désirant accéder directement aux variables de la session devra instancier l'objet $request.
+
+
+Les éléments Request et Response couvrent les deux piliers de la communication entre client et serveur. Ainsi, les deux éléments de HttpFoundation nous transmettent la base sur laquelle nous allons construire toute la logique de notre application Symfony de type Model-View-Controller, qui réceptionnera une REQUÊTE, la traitera, avant de renvoyer la REPONSE appropriée.
+
+========================================================================================================================================================================================================================================================================================================================================================
 Organisation de notre application: Le Controller
 
 Si index.php est le point de départ de la requête client vers le lancement de notre application, les classes .php de notre Controller sont où nous, en tant que développeurs, commençons le développement de notre application.
@@ -537,8 +600,8 @@ Pour cela, il faudra arranger nos formulaire afin d'incorporer cette nouvelle fo
 Une fois les relations notées via Doctrine, les colonnes relatives à l'Entity liée sont créées/modifiées. Nous pouvons remarquer que le nom de la colonne associée peut changer. Encore une fois, ceci n'est pas pertinent à Symfony. Si le nom d'une colonne passe de, par exemple, "category" à "category_id", le nom de l'attribut qui nous intéresse est celui spécifié dans notre classe PHP Entity "Produit". Le changement de nom de l'entrée du tableau est effectué par Doctrine pour simplifier le travail de lecture et est automatiquement pris en charge: nous n'avons pas à nous en préoccuper.
 
 En ce qui concerne la modification nécessaire du formulaire, trois options s'offrent à nous:
-	- La première possibilité consister à laisser (ou à créer) un champ classique pour l'entrée que nous désirons utiliser pour notre Entity liée, puis à récupérer la valeur entrée, utiliser une recherche dans la base de données pour trouver une valeur semblable, et si oui, établir un lien avec l'instance d'Entity pertinente ou la créer le cas échéant. Il s'agit d'une solution fastidieuse.
-	- La seconde possibilité consister à imbriquer le formulaire de l'Entity secondaire, c'est-à-dire dotée du rôle dit "inverse" de la relation, à l'intérieur du formulaire de l'Entity principale. A la complétion de ce superformulaire, deux Entités seront créées en même et le lien entre les deux sera automatiquement validé. Il s'agit d'une solution efficace si nous désirons créer deux Entities liées par une relation unique de type OneToOne.
+	- La première possibilité consiste à laisser (ou à créer) un champ classique pour l'entrée que nous désirons utiliser pour notre Entity liée, puis à récupérer la valeur entrée, utiliser une recherche dans la base de données pour trouver une valeur semblable, et si oui, établir un lien avec l'instance d'Entity pertinente ou la créer le cas échéant. Il s'agit d'une solution fastidieuse.
+	- La seconde possibilité consiste à imbriquer le formulaire de l'Entity secondaire, c'est-à-dire dotée du rôle dit "inverse" de la relation, à l'intérieur du formulaire de l'Entity principale. A la complétion de ce superformulaire, deux Entités seront créées en même temps et le lien entre les deux sera automatiquement validé. Il s'agit d'une solution efficace si nous désirons créer deux Entities liées par une relation unique de type OneToOne.
 	- La troisième possibilité consiste à utiliser un champ spécial dédié à la création de liens entre une (ou plusieurs) Entity déjà existante et une Entity en cours de création via formulaire. Il s'agit d'un champ dit "EntityType". Ce champ permet de sélectionner parmi les entrées existantes d'une table celle(s) considérée(s) pertinente(s) pour une jointure avec l'Entity que nous désirons créer ou modifier.
 
 Le fonctionnement des formulaires étant entièrement couvert par Symfony, nous n'avons qu'à nous préoccuper du type d'option dont nous avons besoin selon notre situation. Il suffit de choisir notre type et de spécifier les options en nous aidant de la documentation officielle.
